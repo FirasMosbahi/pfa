@@ -1,21 +1,20 @@
-import json
-
+import requests
 from flask import Flask, request, jsonify
 from functools import wraps
 import jwt  # Assuming you have PyJWT installed
-from bson import ObjectId, json_util
+from bson import ObjectId
 
+import load_env
 from purchases_collection import collection
 
 app = Flask(__name__)
 
-# Replace with a strong, random secret key
-app.config['SECRET_KEY'] = 'secret'
 
+# Replace with a strong, random secret key
 
 def decode_token(auth_token):
     try:
-        payload = jwt.decode(auth_token, "secret", algorithms=['HS256'])
+        payload = jwt.decode(auth_token, load_env.jwtSecret, algorithms=['HS256'])
         return payload
     except jwt.ExpiredSignatureError:
         return jsonify({'message': 'Token expired'}), 401
@@ -45,37 +44,30 @@ def token_required(f):
     return decorated
 
 
-# Example route that requires a valid token
 @app.route('/buy', methods=['POST'])
 @token_required
-def protected_resource():
+def buy():
     user_id = request.user['id']  # Access user ID from decoded payload
     data = request.get_json()  # Get data from the request body (should be JSON)
     if not (data['productId'] and data['quantity']):
         return jsonify({'message': 'Missing data'}), 400
 
+    response = requests.patch(f'{load_env.productMsUrl}/products/buy/{data['productId']}',
+                              json={'quantity': data['quantity']})
+
+    if response.status_code > 299:
+        return jsonify({'message': 'Internal server error'}), 500
+
     data['userId'] = ObjectId(user_id)
     data['productId'] = ObjectId(data['productId'])
-    result = collection.insert_one(data)
+    collection.insert_one(data)
     return jsonify({"message": "purchase done successfully"})
-
-
-def getProductJSON(product):
-    return {
-        'quantity': product['quantity'],
-        'productId': {
-            'name': product['productId']['name'],
-            'price': product['productId']['price'],
-            'photo': product['productId']['photo'],
-            'quantity': product['productId']['quantity']
-        }
-    }
 
 
 # Other application routes (without token protection)
 @app.route('/getPurchases')
 @token_required
-def public_resource():
+def get_purchases():
     user_id = request.user['id']
 
     aggregation = [
@@ -96,7 +88,6 @@ def public_resource():
     cursor = collection.aggregate(aggregation)
     specific_purchase = list(cursor)
 
-
     for purchase in specific_purchase:
         purchase['_id'] = str(purchase['_id'])
         purchase['userId'] = str(purchase['userId'])
@@ -104,12 +95,7 @@ def public_resource():
         purchase['productId']['categoryId'] = str(purchase['productId']['categoryId'])
         purchase['userId'] = str(purchase['userId'])
 
-
-
     return jsonify({"messagee": specific_purchase})
-
-
-#return jsonify(specific_purchase)
 
 
 if __name__ == '__main__':

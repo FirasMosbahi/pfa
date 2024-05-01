@@ -2,6 +2,7 @@ name: product-ms-pipeline
 
 on:
   push:
+# todo: to be uncommented after testing    
 #    paths:
 #      - 'product-ms/**'
 
@@ -11,8 +12,8 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Enter the product-ms directory
-        run: cd product-ms
+      - name: Enter the products-ms directory
+        run: cd products-ms
 
       - name: Use Node.js 20
         uses: actions/setup-node@v3

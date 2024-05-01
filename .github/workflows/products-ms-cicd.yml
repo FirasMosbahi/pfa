@@ -20,10 +20,11 @@ jobs:
       - name: Install dependencies
         run: cd products-ms && npm install
 
-      - name: Add Env
-        run: touch products-ms/.env && echo "JWT_SECRET=${{secrets.JWT_SECRET}}\nDB_HOST=${{secrets.DB_HOST}}${{secrets.DB_NAME}}\nPORT=${{secrets.PRODUCT_MS_PORT}}" > products-ms/.env
-
       - name: run tests
+        env:
+          JWT_SECRET: ${{secrets.JWT_SECRET}}
+          DB_HOST: ${{secrets.DB_HOST}}/${{secrets.DB_NAME}}
+          PORT: ${{secrets.PRODUCT_MS_PORT}}
         run: cd products-ms && ls && cat .env && npm test
 
       - name: Build NestJS app

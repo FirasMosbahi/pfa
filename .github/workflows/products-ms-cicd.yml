@@ -20,6 +20,12 @@ jobs:
       - name: Install dependencies
         run: cd products-ms && npm install
 
+      - name: Add Env
+        run: echo "JWT_SECRET=${{secrets.JWT_SECRET}}" > .env && "DB_HOST=${{secrets.DB_HOST}}${{secrets.DB_NAME}}" > .env && "PORT=${{secrets.PRODUCT_MS_PORT}}" > .env
+
+      - name: run tests
+        run: cd products-ms && npm test
+
       - name: Build NestJS app
         run: cd products-ms && npm run build
 
@@ -33,29 +39,3 @@ jobs:
         with:
           name: build-artifact
           path: build
-
-  test:
-    runs-on: ubuntu-latest
-    needs: build # More specific dependency
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Use Node.js 20
-        uses: actions/setup-node@v3
-        with:
-          node-version: 20
-
-      - name: Download build artifact
-        uses: actions/download-artifact@v3
-        with:
-          name: build-artifact
-
-      - name: testing
-        run: cd ${{ github.workspace }} && ls
-
-      - name: Install dependencies
-        run: cd ${{ github.workspace }} && npm install    
-
-
-      - name: Run tests
-        run: cd ${{ github.workspace }} && npm test

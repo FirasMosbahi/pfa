@@ -54,8 +54,8 @@ jobs:
         run: cd ${{ github.workspace }} && ls
 
       - name: Install dependencies
-        run: cd ${{ github.workspace }}/build && npm install    
+        run: cd ${{ github.workspace }} && npm install    
 
 
       - name: Run tests
-        run: cd ${{ github.workspace }}/build && npm test
+        run: cd ${{ github.workspace }} && npm test

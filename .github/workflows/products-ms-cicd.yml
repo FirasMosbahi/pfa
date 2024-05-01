@@ -12,19 +12,16 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Enter the products-ms directory
-        run: cd products-ms
-
       - name: Use Node.js 20
         uses: actions/setup-node@v3
         with:
           node-version: 20
 
       - name: Install dependencies
-        run: npm install
+        run: cd products-ms && npm install
 
       - name: Build NestJS app
-        run: npm run build
+        run: cd products-ms && npm run build
 
       - name: Create build artifact
         uses: actions/upload-artifact@v3

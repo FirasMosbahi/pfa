@@ -51,8 +51,8 @@ jobs:
           name: build-artifact
 
       - name: Install dependencies
-        run: cd ${{ github.workspace }}/build-artifact && npm install    
+        run: cd ${{ github.workspace }}/build && npm install    
 
 
       - name: Run tests
-        run: cd ${{ github.workspace }}/build-artifact && npm test
+        run: cd ${{ github.workspace }}/build && npm test

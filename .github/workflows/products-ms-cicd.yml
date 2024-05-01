@@ -27,7 +27,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: build-artifact
-          path: dist
+          path: products-ms/dist
 
   test:
     runs-on: ubuntu-latest

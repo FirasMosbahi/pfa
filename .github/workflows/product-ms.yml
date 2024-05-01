@@ -3,7 +3,7 @@ name: prodcut ms pipeline
 on:
   push:
     paths:
-      - 'auth-ms/**'
+      - 'product-ms/**'
 jobs:
     build:
         runs-on: ubuntu-latest

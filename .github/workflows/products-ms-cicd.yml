@@ -2,9 +2,8 @@ name: product-ms-pipeline
 
 on:
   push:
-# todo: to be uncommented after testing    
-#    paths:
-#      - 'product-ms/**'
+    paths:
+      - 'product-ms/**'
 
 jobs:
   build:

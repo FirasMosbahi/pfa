@@ -16,14 +16,27 @@ jobs:
       - name: install dependencies
         run: cd auth-ms && go mod tidy   
       - name: Build
+        env:
+          JWT_SECRET: ${{secrets.JWT_SECRET}}
+          MONGODB_URI: ${{secrets.DB_HOST}}
+          DB_NAME: ${{secrets.DB_NAME}}
         run: cd auth-ms && go build -o auth-ms-build .
       - name: Test
+        env:
+          JWT_SECRET: ${{secrets.JWT_SECRET}}
+          MONGODB_URI: ${{secrets.DB_HOST}}
+          DB_NAME: ${{secrets.DB_NAME}}
         run: cd auth-ms && go test
+
+      - name: Create build directory
+        run: mkdir build && cp auth-ms/auth-ms-build auth-ms/Dockerfile
+
       - name: Create build artifact
         uses: actions/upload-artifact@v3
         with:
           name: build-artifact
           path: auth-ms/auth-ms-build
+  
   build-docker-image:
     runs-on: ubuntu-latest
     needs: build-test

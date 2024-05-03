@@ -29,10 +29,8 @@ jobs:
       - name: Build NestJS app
         run: cd products-ms && npm run build
 
-      
       - name: Create build directory
         run: mkdir build && cp -r products-ms/dist build && cp products-ms/nest-cli.json products-ms/package.json products-ms/Dockerfile products-ms/.dockerignore build
-
 
       - name: Create build artifact
         uses: actions/upload-artifact@v3

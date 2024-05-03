@@ -23,7 +23,7 @@ jobs:
         run: cd auth-ms && go test
 
       - name: Create build directory
-        run: mkdir build && cp auth-ms/auth-ms-build auth-ms/Dockerfile
+        run: mkdir build && cp auth-ms/auth-ms-build auth-ms/Dockerfile build
 
       - name: Create build artifact
         uses: actions/upload-artifact@v3

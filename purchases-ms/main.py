@@ -99,4 +99,4 @@ def get_purchases():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)  # Set debug=False for production use
+    app.run(host='0.0.0.0',port=load_env.port)  # Set debug=False for production use

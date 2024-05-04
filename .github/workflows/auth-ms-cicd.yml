@@ -2,6 +2,8 @@ name: auth-ms Pipeline
 
 on:
   push:
+    paths:
+      - 'auth-ms/**'
 
 jobs:
   build-test:

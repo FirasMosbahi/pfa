@@ -24,7 +24,7 @@ jobs:
       - name: Run tests
         env:
           JWT_SECRET: ${{secrets.JWT_SECRET}}
-          MONGODB_URI: ${{secrets.DB_HOST}}/
+          MONGODB_URI: ${{secrets.DB_HOST}}
           MONGODB_DATABASE: ${{secrets.DB_NAME}}
           PORT: ${{secrets.PRODUCT_MS_PORT}}
         run: |

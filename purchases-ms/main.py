@@ -52,8 +52,8 @@ def buy():
     if not (data['productId'] and data['quantity']):
         return jsonify({'message': 'Missing data'}), 400
 
-    response = requests.patch(f'{load_env.productMsUrl}/products/buy/{data['productId']}',
-                              json={'quantity': data['quantity']})
+    response = requests.patch(f"{load_env.productMsUrl}/products/buy/{data['productId']}",
+                          json={'quantity': data['quantity']})
 
     if response.status_code > 299:
         return jsonify({'message': 'Internal server error'}), 500
@@ -99,4 +99,4 @@ def get_purchases():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)  # Set debug=False for production use
+    app.run(host='0.0.0.0',port=load_env.port)  # Set debug=False for production use

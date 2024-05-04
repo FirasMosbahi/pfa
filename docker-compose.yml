@@ -1,0 +1,32 @@
+version: '1'
+
+services:
+  product-ms:
+    build:
+      context: ./products-ms
+      dockerfile: Dockerfile
+    container_name: products-ms
+    environment:
+      PORT: 5000
+      DB_HOST: "mongodb+srv://firasmosbehi:firas@cluster0.br9usu1.mongodb.net/commerce"
+      JWT_SECRET: secret
+    ports:
+      - "5000:5000"
+    command: ["node", "dist/main.js"]
+
+  purchases-ms:
+    build:
+      context: ./purchases-ms
+      dockerfile: Dockerfile
+    container_name: purchases-ms
+    environment:
+      PORT: 5001
+      MONGODB_URI: "mongodb+srv://firasmosbehi:firas@cluster0.br9usu1.mongodb.net/commerce"
+      MONGODB_DATABASE: commerce
+      JWT_SECRET: secret
+      PRODUCT_MS_URL: localhost:5000
+    ports:
+      - "5001:5001"
+    depends_on:
+      - product-ms 
+    command: ["python", "main.py"]

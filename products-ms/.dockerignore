@@ -3,7 +3,4 @@
 .eslintrc.js
 .gitignore
 .prettierrc
-package-lock.json
-tsconfig.build.json
-tsconfig.json
 

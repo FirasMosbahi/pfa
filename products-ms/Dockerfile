@@ -25,7 +25,6 @@ ENV PORT=5000 \
     DB_HOST=mongodb+srv://firasmosbehi:firas@cluster0.br9usu1.mongodb.net/commerce \
     JWT_SECRET=secret
 
-
 EXPOSE 5000
 
 CMD ["node", "dist/main.js"]

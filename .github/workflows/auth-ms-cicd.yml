@@ -45,6 +45,9 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: build-artifact
+
+      - name: listing
+        run: ls
         
       - name: Build image
         run: docker build -t firasmosbehi/auth-ms:latest .

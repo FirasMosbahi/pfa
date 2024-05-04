@@ -47,7 +47,7 @@ jobs:
           name: build-artifact
 
       - name: listing
-        run: ls
+        run: cd auth-ms-build && ls
         
       - name: Build image
         run: docker build -t firasmosbehi/auth-ms:latest .

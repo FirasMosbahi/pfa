@@ -1,7 +1,6 @@
 import pytest
 import jwt
 from main import decode_token
-from jwt.exceptions import InvalidTokenError
 
 def test_decode_token_success():
     valid_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEifQ.ivJ5P23wqVo3w31flg3aOu7er--Ijght_RrBf_MuqsU"

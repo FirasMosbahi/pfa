@@ -2,8 +2,6 @@ name: purchases-ms-pipeline
 
 on:
   push:
-    paths:
-      - 'purchases-ms/**'
 
 jobs:
   build:

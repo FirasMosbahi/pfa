@@ -2,6 +2,9 @@ name: purchases-ms-pipeline
 
 on:
   push:
+    path:
+      - 'purchases-ms/**'
+      - '.github/workflows/purchases-ms-cicd.yml'
 
 jobs:
   build:
@@ -34,14 +37,19 @@ jobs:
       - name: Build Docker image
         run: |
           cd purchases-ms
-          docker build -t firasmosbehi/purchases-ms:latest .
+          docker build -t purchases-ms:latest .
 
-      - name: Login to Docker Hub
-        uses: docker/login-action@v2
+      - name: Login to Azure Container Registry
+        uses: azure/docker-login@v1
         with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
+          login-server: devopspfa.azurecr.io
+          username: ${{ secrets.ACR_USERNAME }}
+          password: ${{ secrets.ACR_PASSWORD }}
 
-      - name: Push Docker image
+      - name: Tag Docker image
         run: |
-          docker push firasmosbehi/purchases-ms:latest
+          docker tag purchases-ms:latest devopspfa.azurecr.io/purchases-ms:latest
+
+      - name: Push Docker image to ACR
+        run: |
+          docker push devopspfa.azurecr.io/purchases-ms:latest

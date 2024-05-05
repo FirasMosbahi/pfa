@@ -50,7 +50,7 @@ jobs:
           name: build-artifact
 
       - name: test
-        run: ls    
+        run: cd auth-ms-build && ls  
         
       - name: Build image
         run: docker build -t auth-ms:latest .

@@ -1,10 +1,14 @@
 # Stage 1: Build
 FROM node AS build
 
+# Install Nest.js globally
+RUN npm install -g @nestjs/cli
+
 WORKDIR /app
 
 COPY package*.json ./
 
+# Install production dependencies
 RUN npm install --only=production
 
 COPY . .
@@ -18,6 +22,8 @@ FROM node:alpine
 WORKDIR /app
 
 COPY --from=build /app/dist ./dist
+COPY --from=build /app/node_modules ./node_modules
+COPY --from=build /app/package.json ./package.json
 
 ENV PORT=5000 \
     DB_HOST=mongodb+srv://firasmosbehi:firas@cluster0.br9usu1.mongodb.net/commerce \

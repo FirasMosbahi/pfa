@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
   semgrep:
@@ -26,12 +29,3 @@ jobs:
       - name: Cancel push if vulnerabilities found
         if: steps.semgrep.outputs.has_vulnerabilities == 'true'
         run: echo "Vulnerabilities found. Cancelling push." && exit 1
-
-      - name: Push changes
-        if: steps.semgrep.outputs.has_vulnerabilities != 'true'
-        run: |
-          git config --global user.name 'amine'
-          git config --global user.email 'mohamedamineguesmi@insat.u-carthage.tn'
-          git add .
-          git commit -m "Auto-commit: Semgrep scan passed"
-          git push

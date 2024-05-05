@@ -61,8 +61,8 @@ jobs:
 
       - name: Tag Docker image
         run: |
-          docker tag purchases-ms:latest devopspfa.azurecr.io/auth-ms:latest
+          docker tag purchases-ms:latest devopspfa.azurecr.io/firasmosbehi/auth-ms:latest
 
       - name: Push Docker image to ACR
         run: |
-          docker push devopspfa.azurecr.io/auth-ms:latest 
+          docker push devopspfa.azurecr.io/firasmosbehi/auth-ms:latest 

@@ -7,9 +7,10 @@ RUN npm install -g @nestjs/cli
 WORKDIR /app
 
 COPY package*.json ./
+COPY tsconfig*.json ./
 
 # Install production dependencies
-RUN npm install --only=production
+RUN npm install 
 
 COPY . .
 

@@ -2,8 +2,7 @@ name: product-ms-pipeline
 
 on:
   push:
-    paths:
-      - 'product-ms/**'
+
 
 jobs:
   build:

@@ -48,9 +48,6 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: build-artifact
-
-      - name: test
-        run: ls  
         
       - name: Build image
         run: docker build -t auth-ms:latest .

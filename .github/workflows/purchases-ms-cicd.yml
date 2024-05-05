@@ -2,6 +2,9 @@ name: purchases-ms-pipeline
 
 on:
   push:
+    path:
+      - 'purchases-ms/**'
+      - '.github/workflows/purchases-ms-cicd.yml'
 
 jobs:
   build:

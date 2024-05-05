@@ -54,7 +54,7 @@ jobs:
           name: build-artifact
 
       - name: Build image
-        run: docker build -t firasmosbehi/product-ms:latest .
+        run: docker build -t product-ms:latest .
 
       - name: Login to Azure Container Registry
         uses: azure/docker-login@v1
@@ -65,8 +65,8 @@ jobs:
 
       - name: Tag Docker image
         run: |
-          docker tag purchases-ms:latest devopspfa.azurecr.io/firasmosbehi/products-ms:latest
+          docker tag purchases-ms:latest devopspfa.azurecr.io/products-ms:latest
 
       - name: Push Docker image to ACR
         run: |
-          docker push devopspfa.azurecr.io/firasmosbehi/products-ms:latest 
+          docker push devopspfa.azurecr.io/products-ms:latest 

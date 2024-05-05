@@ -2,7 +2,7 @@ name: auth-ms Pipeline
 
 on:
   push:
-    path:
+    paths:
       - 'auth-ms/**'
       - '.github/workflows/auth-ms-cicd.yml'
 

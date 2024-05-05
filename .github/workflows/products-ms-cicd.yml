@@ -2,7 +2,7 @@ name: product-ms-pipeline
 
 on:
   push:
-    path:
+    paths:
       - 'products-ms/**'
       - '.github/workflows/products-ms-cicd.yml'
 

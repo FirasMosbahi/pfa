@@ -1,0 +1,37 @@
+name: Semgrep Scan
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  semgrep:
+    name: Semgrep Scan
+    runs-on: ubuntu-latest
+
+    container:
+      image: returntocorp/semgrep
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Run Semgrep
+        id: semgrep
+        run: |
+          semgrep ci --json > semgrep_results.json
+          echo "::set-output name=has_vulnerabilities::$(jq '.issues | length > 0' semgrep_results.json)"
+
+      - name: Cancel push if vulnerabilities found
+        if: steps.semgrep.outputs.has_vulnerabilities == 'true'
+        run: echo "Vulnerabilities found. Cancelling push." && exit 1
+
+      - name: Push changes
+        if: steps.semgrep.outputs.has_vulnerabilities != 'true'
+        run: |
+          git config --global user.name 'amine'
+          git config --global user.email 'mohamedamineguesmi@insat.u-carthage.tn'
+          git add .
+          git commit -m "Auto-commit: Semgrep scan passed"
+          git push

@@ -1,8 +1,16 @@
-FROM golang:latest
+FROM golang:1.22.2-bookworm
 
 WORKDIR /app
 
+COPY go.mod .
+
+RUN ["go" , "mod" , "tidy"]
+
 COPY . .
+
+RUN ["sh", "-c", "echo $MONGODB_URI > .env && echo $JWT_SECRET >> .env && echo $DB_NAME >> .env"]
+
+RUN ["go", "build", "-o", "auth-ms-build", "."]
 
 EXPOSE 8080
 

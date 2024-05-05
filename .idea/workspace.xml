@@ -4,12 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="30de6fec-21bf-429d-9d52-628c80ef7dee" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.github/workflows/products-ms-cicd.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/products-ms-cicd.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/products-ms/.dockerignore" beforeDir="false" afterPath="$PROJECT_DIR$/products-ms/.dockerignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/products-ms/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/products-ms/Dockerfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/products-ms/src/main.ts" beforeDir="false" afterPath="$PROJECT_DIR$/products-ms/src/main.ts" afterDir="false" />
-    </list>
+    <list default="true" id="30de6fec-21bf-429d-9d52-628c80ef7dee" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -74,6 +69,7 @@
       <workItem from="1714746330695" duration="23000" />
       <workItem from="1714746362625" duration="1158000" />
       <workItem from="1714748191598" duration="4000" />
+      <workItem from="1714826188615" duration="26000" />
     </task>
     <servers />
   </component>
@@ -82,6 +78,10 @@
   </component>
   <component name="WfRunsListSearchHistory"><![CDATA[{
   "history": [
+    {
+      "branch": "main",
+      "currentBranchFilter": true
+    },
     {
       "branch": "main",
       "currentBranchFilter": true

@@ -61,3 +61,49 @@ spec:
         image: devopspfa.azurecr.io/purchases-ms:latest
         ports:
         - containerPort: 5000
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: auth-service
+spec:
+  selector:
+    app: auth-ms  # Change this to match your app labels
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 5001
+  type: LoadBalancer
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: product-service
+spec:
+  selector:
+    app: products-ms  # Change this to match your app labels
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 5000
+  type: LoadBalancer
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: purchases-service
+spec:
+  selector:
+    app: purchases-ms  # Change this to match your app labels
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 5000
+  type: LoadBalancer
+

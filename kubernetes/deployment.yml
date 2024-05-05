@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: product-ms
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: product-ms
+  template:
+    metadata:
+      labels:
+        app: product-ms
+    spec:
+      containers:
+        - name: product-ms
+          image: devopspfa.azurecr.io/products-ms:latest
+          ports:
+            - containerPort: 3000
+          env:
+            - name: DB_HOST
+              value: mongodb+srv://firasmosbehi:firas@cluster0.br9usu1.mongodb.net/commerce
+            - name: PORT
+              value: "3000"
+            - name: JWT_SECRET
+              value: secret 
+        - name: auth-ms
+          image: devopspfa.azurecr.io/auth-ms:latest
+          ports:
+            - containerPort: 5000
+          env:
+            - name: DB_HOST
+              value: mongodb+srv://firasmosbehi:firas@cluster0.br9usu1.mongodb.net/commerce
+            - name: PORT
+              value: "3000"
+            - name: JWT_SECRET
+              value: secret            

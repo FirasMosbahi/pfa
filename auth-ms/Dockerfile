@@ -8,7 +8,7 @@ RUN ["go" , "mod" , "tidy"]
 
 COPY . .
 
-RUN ["sh", "-c", "echo $MONGODB_URI > .env && echo $JWT_SECRET >> .env && echo $DB_NAME >> .env"]
+RUN ["sh", "-c", "echo", "$MONGODB_URI" ,">", ".env" ,"&&", "echo", "$JWT_SECRET", ">>", ".env" ,"&&" ,"echo" ,"$DB_NAME", ">>" ,".env"]
 
 RUN ["go", "build", "."]
 

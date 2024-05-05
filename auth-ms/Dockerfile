@@ -10,8 +10,8 @@ COPY . .
 
 RUN ["sh", "-c", "echo $MONGODB_URI > .env && echo $JWT_SECRET >> .env && echo $DB_NAME >> .env"]
 
-RUN ["go", "build", "-o", "auth-ms-build", "."]
+RUN ["go", "build", "."]
 
 EXPOSE 8080
 
-CMD ["./auth-ms-build"]
+CMD ["go" , "run" , "."]

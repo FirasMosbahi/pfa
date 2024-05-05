@@ -64,7 +64,7 @@ jobs:
 
       - name: Tag Docker image
         run: |
-          docker tag purchases-ms:latest devopspfa.azurecr.io/products-ms:latest
+          docker tag products-ms:latest devopspfa.azurecr.io/products-ms:latest
 
       - name: Push Docker image to ACR
         run: |

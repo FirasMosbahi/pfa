@@ -28,7 +28,7 @@ jobs:
         run: |
           cd products-ms
           npm audit --json > npm-audit.json
-          
+
       - name: Run tests
         env:
           JWT_SECRET: ${{secrets.JWT_SECRET}}
@@ -88,8 +88,8 @@ jobs:
 
       - name: Tag Docker image
         run: |
-          docker tag products-ms:latest devopspfa.azurecr.io/products-ms:latest
+          docker tag products-ms:latest pfaacr.azurecr.io/products-ms:latest
 
       - name: Push Docker image to ACR
         run: |
-          docker push devopspfa.azurecr.io/products-ms:latest
+          docker push pfaacr.azurecr.io/products-ms:latest

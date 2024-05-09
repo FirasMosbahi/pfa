@@ -24,6 +24,11 @@ jobs:
           cd products-ms
           npm install
 
+      - name: Dependency Vulnerability Scanning
+        run: |
+          cd products-ms
+          npm audit --json > npm-audit.json
+          
       - name: Run tests
         env:
           JWT_SECRET: ${{secrets.JWT_SECRET}}

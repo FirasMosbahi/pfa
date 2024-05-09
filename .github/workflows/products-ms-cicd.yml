@@ -79,7 +79,7 @@ jobs:
         run: |
           docker run --rm -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy image products-ms:latest
 
-      - name: Login to Azure Container Registry
+      - name: Login to Azure Container Registry ACR
         uses: azure/docker-login@v1
         with:
           login-server: pfaacr.azurecr.io

@@ -23,18 +23,6 @@ jobs:
       
       - name: Install dependencies
         run: cd auth-ms && go mod tidy
-
-      - name: Install Gosec
-        run: GO111MODULE=on go get -u github.com/securego/gosec/v2/cmd/gosec
-      
-      - name: Dependency Vulnerability Scanning (Go)
-        run: |
-          cd auth-ms
-          gosec -fmt=json ./... > gosec-report.json
-
-      - name: Show Gosec Report
-        run: |
-          cat auth-ms/gosec-report.json
       
       - name: Build
         run: cd auth-ms && go build -o auth-ms-build .

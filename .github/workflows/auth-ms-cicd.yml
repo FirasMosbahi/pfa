@@ -17,9 +17,6 @@ jobs:
         with:
           go-version: 1.22.2
           
-      - name: Initialize Go module
-        run: cd auth-ms && go mod init auth-ms
-      
       - name: Add environment variables
         run: |
           cd auth-ms && touch .env && echo 'MONGODB_URI=${{secrets.DB_HOST}}' >> .env && echo 'JWT_SECRET=${{secrets.JWT_SECRET}}' >> .env && echo 'DB_NAME=${{secrets.DB_NAME}}' >> .env && cat .env

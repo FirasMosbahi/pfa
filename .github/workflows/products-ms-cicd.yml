@@ -29,6 +29,10 @@ jobs:
           cd products-ms
           npm audit --json > npm-audit.json
 
+      - name: Show NPM Audit Report
+        run: |
+          cat products-ms/npm-audit.json
+
       - name: Run tests
         env:
           JWT_SECRET: ${{secrets.JWT_SECRET}}

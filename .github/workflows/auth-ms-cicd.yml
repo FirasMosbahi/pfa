@@ -20,6 +20,16 @@ jobs:
         run: cd auth-ms && touch .env && echo 'MONGODB_URI=${{secrets.DB_HOST}}' >> .env && echo 'JWT_SECRET=${{secrets.JWT_SECRET}}' >> .env && echo 'DB_NAME=${{secrets.DB_NAME}}' >> .env && cat .env
       - name: install dependencies
         run: cd auth-ms && go mod tidy   
+      - name: Dependency Vulnerability Scanning (Go)
+        run: |
+          cd products-ms
+          go get -u github.com/securego/gosec/v2/cmd/gosec
+          gosec -fmt=json ./... > gosec-report.json
+
+      - name: Show Gosec Report
+        run: |
+          cat products-ms/gosec-report.json
+      
       - name: Build
         run: cd auth-ms && go build -o auth-ms-build .
       - name: Test
@@ -46,6 +56,10 @@ jobs:
         
       - name: Build image
         run: cd auth-ms && docker build -t auth-ms:latest .
+
+     - name: Container Security Scanning
+        run: |
+          docker run --rm -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy image auth-ms:latest
         
       - name: Login to Azure Container Registry
         uses: azure/docker-login@v1
@@ -61,3 +75,15 @@ jobs:
       - name: Push Docker image to ACR
         run: |
           docker push pfaacr.azurecr.io/auth-ms:latest 
+  codecov:
+    runs-on: ubuntu-latest
+    needs: build-docker-image
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Upload code coverage report
+        uses: codecov/codecov-action@v2
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}

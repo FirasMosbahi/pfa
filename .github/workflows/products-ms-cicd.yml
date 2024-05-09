@@ -10,7 +10,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
 
       - name: Use Node.js 20
         uses: actions/setup-node@v3
@@ -18,20 +19,29 @@ jobs:
           node-version: 20
 
       - name: Install dependencies
-        run: cd products-ms && npm install
+        run: |
+          cd products-ms
+          npm install
 
-      - name: run tests
+      - name: Run tests
         env:
           JWT_SECRET: ${{secrets.JWT_SECRET}}
           DB_HOST: ${{secrets.DB_HOST}}/${{secrets.DB_NAME}}
           PORT: ${{secrets.PRODUCT_MS_PORT}}
-        run: cd products-ms && npm test
+        run: |
+          cd products-ms
+          npm test
 
       - name: Build NestJS app
-        run: cd products-ms && npm run build
+        run: |
+          cd products-ms
+          npm run build
 
       - name: Create build directory
-        run: mkdir build && cp -r products-ms/dist build && cp products-ms/nest-cli.json products-ms/package.json products-ms/Dockerfile products-ms/.dockerignore build
+        run: |
+          mkdir build
+          cp -r products-ms/dist build
+          cp products-ms/nest-cli.json products-ms/package.json products-ms/Dockerfile products-ms/.dockerignore build
 
       - name: Create build artifact
         uses: actions/upload-artifact@v3
@@ -54,8 +64,13 @@ jobs:
         with:
           name: build-artifact
 
-      - name: Build image
-        run: docker build -t products-ms:latest .
+      - name: Build Docker image
+        run: |
+          docker build -t products-ms:latest .
+
+      - name: Container Security Scanning
+        run: |
+          docker run --rm -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy products-ms:latest
 
       - name: Login to Azure Container Registry
         uses: azure/docker-login@v1
@@ -68,7 +83,6 @@ jobs:
         run: |
           docker tag products-ms:latest devopspfa.azurecr.io/products-ms:latest
 
-
       - name: Push Docker image to ACR
         run: |
-          docker push devopspfa.azurecr.io/products-ms:latest 
+          docker push devopspfa.azurecr.io/products-ms:latest

@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: product-ms
-          image: devopspfa.azurecr.io/products-ms:latest
+          image: pfaacr.azurecr.io/products-ms:latest
           ports:
             - containerPort: 3000
           env:
@@ -25,7 +25,7 @@ spec:
             - name: JWT_SECRET
               value: secret 
         - name: auth-ms
-          image: devopspfa.azurecr.io/auth-ms:latest
+          image: pfaacr.azurecr.io/auth-ms:latest
           ports:
             - containerPort: 5000
           env:

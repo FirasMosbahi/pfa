@@ -42,14 +42,14 @@ jobs:
       - name: Login to Azure Container Registry
         uses: azure/docker-login@v1
         with:
-          login-server: devopspfa.azurecr.io
+          login-server: pfaacr.azurecr.io
           username: ${{ secrets.ACR_USERNAME }}
           password: ${{ secrets.ACR_PASSWORD }}
 
       - name: Tag Docker image
         run: |
-          docker tag purchases-ms:latest devopspfa.azurecr.io/purchases-ms:latest
+          docker tag purchases-ms:latest pfaacr.azurecr.io/purchases-ms:latest
 
       - name: Push Docker image to ACR
         run: |
-          docker push devopspfa.azurecr.io/purchases-ms:latest
+          docker push pfaacr.azurecr.io/purchases-ms:latest

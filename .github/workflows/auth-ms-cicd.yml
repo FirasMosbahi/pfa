@@ -57,7 +57,7 @@ jobs:
       - name: Build image
         run: cd auth-ms && docker build -t auth-ms:latest .
 
-     - name: Container Security Scanning
+      - name: Container Security Scanning
         run: |
           docker run --rm -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy image auth-ms:latest
         

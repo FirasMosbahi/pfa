@@ -27,7 +27,6 @@ jobs:
       - name: Dependency Vulnerability Scanning (Go)
         run: |
           cd auth-ms
-          go mod init auth-ms
           go get -u github.com/securego/gosec/v2/cmd/gosec
           gosec -fmt=json ./... > gosec-report.json
 

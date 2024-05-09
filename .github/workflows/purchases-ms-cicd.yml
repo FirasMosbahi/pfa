@@ -39,7 +39,7 @@ jobs:
           cd purchases-ms
           docker build -t purchases-ms:latest .
 
-      - name: Login to Azure Container Registry
+      - name: Login to Azure Container Registry ACR
         uses: azure/docker-login@v1
         with:
           login-server: pfaacr.azurecr.io

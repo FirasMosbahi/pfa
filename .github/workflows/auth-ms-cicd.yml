@@ -8,30 +8,38 @@ on:
 
 jobs:
   build-test:
-    runs-on: ubuntu-latest  # Or another suitable runner image
+    runs-on: ubuntu-latest  
     steps:
-      - uses: actions/checkout@v3  # Checkout code from repository
+      - uses: actions/checkout@v3 
         
       - name: Setup Go environment
         uses: actions/setup-go@v3
         with:
           go-version: 1.22.2
-      - name: add env
-        run: cd auth-ms && touch .env && echo 'MONGODB_URI=${{secrets.DB_HOST}}' >> .env && echo 'JWT_SECRET=${{secrets.JWT_SECRET}}' >> .env && echo 'DB_NAME=${{secrets.DB_NAME}}' >> .env && cat .env
-      - name: install dependencies
-        run: cd auth-ms && go mod tidy   
+          
+      - name: Initialize Go module
+        run: cd auth-ms && go mod init auth-ms
+      
+      - name: Add environment variables
+        run: |
+          cd auth-ms && touch .env && echo 'MONGODB_URI=${{secrets.DB_HOST}}' >> .env && echo 'JWT_SECRET=${{secrets.JWT_SECRET}}' >> .env && echo 'DB_NAME=${{secrets.DB_NAME}}' >> .env && cat .env
+      
+      - name: Install dependencies
+        run: cd auth-ms && go mod tidy
+        
       - name: Dependency Vulnerability Scanning (Go)
         run: |
-          cd products-ms
+          cd auth-ms
           go get -u github.com/securego/gosec/v2/cmd/gosec
           gosec -fmt=json ./... > gosec-report.json
 
       - name: Show Gosec Report
         run: |
-          cat products-ms/gosec-report.json
+          cat auth-ms/gosec-report.json
       
       - name: Build
         run: cd auth-ms && go build -o auth-ms-build .
+        
       - name: Test
         run: cd auth-ms && go test
 

@@ -68,7 +68,7 @@ jobs:
           docker push pfaacr.azurecr.io/purchases-ms:latest
   codecov:
     runs-on: ubuntu-latest
-    needs: build-docker-image
+    needs: build
 
     steps:
       - name: Checkout code

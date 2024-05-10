@@ -28,10 +28,10 @@ jobs:
         run: |
           cd products-ms
           npm audit --json > npm-audit.json
-          cat products-ms/npm-audit.json
-          if [[ $(< npm-audit.json) != "[]" ]]; then
-            echo "Vulnerabilities found, stopping workflow."
+          cat npm-audit.json
+          if [ -s npm-audit.json ]; then
             jq -r '.advisories[] | "Vulnerability ID: \(.id)\nSeverity: \(.severity)\nTitle: \(.title)\nDescription: \(.overview)\n\n"' < npm-audit.json
+            echo "Vulnerabilities found, stopping workflow."
             exit 1
           elif [ ! -s npm-audit.json ]; then
             echo "No vulnerabilities found."

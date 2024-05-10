@@ -30,17 +30,16 @@ jobs:
           npm audit --json > npm-audit.json
           cat npm-audit.json
           if [ -s npm-audit.json ]; then
-            jq -r '.advisories[] | "Vulnerability ID: \(.id)\nSeverity: \(.severity)\nTitle: \(.title)\nDescription: \(.overview)\n\n"' < npm-audit.json
-            echo "Vulnerabilities found, stopping workflow."
-            exit 1
-          elif [ ! -s npm-audit.json ]; then
-            echo "No vulnerabilities found."
+            if [ $(jq '.vulnerabilities' < npm-audit.json) != '{}' ]; then
+              jq -r '.advisories[] | "Vulnerability ID: \(.id)\nSeverity: \(.severity)\nTitle: \(.title)\nDescription: \(.overview)\n\n"' < npm-audit.json
+              echo "Vulnerabilities found, stopping workflow."
+              exit 1
+            else
+              echo "No vulnerabilities found."
+            fi
           else
             echo "npm-audit.json is empty."
           fi
-      - name: Show NPM Audit Report
-        run: |
-          cat products-ms/npm-audit.json
 
       - name: Run tests
         env:

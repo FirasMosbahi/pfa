@@ -4,10 +4,17 @@ on:
   push:
     branches:
       - main
+    paths:
+      - 'products-ms/**'
+      - 'auth-ms/**'
+      - 'purchases-ms/**'
   pull_request:
     branches:
       - main
-
+    paths:
+      - 'products-ms/**'
+      - 'auth-ms/**'
+      - 'purchases-ms/**'
 jobs:
   semgrep:
     name: Semgrep Scan

@@ -23,6 +23,7 @@ jobs:
           cd purchases-ms
           pip install --upgrade pip
           pip install -r requirements.txt
+
       - name: Dependency Vulnerability Scanning (Python)
         run: |
           cd products-ms
@@ -42,6 +43,20 @@ jobs:
         run: |
           cd purchases-ms
           python -m pytest
+          
+      - name: Upload code coverage report to Codecov
+        uses: codecov/codecov-action@v2
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+
+      - name: Check Codecov report for errors
+        run: |
+          if [ -f codecov.txt ]; then
+            if grep -q 'error' codecov.txt; then
+              echo "Error found in Codecov report, stopping workflow."
+              exit 1
+            fi
+          fi
 
       - name: Build Docker image
         run: |
@@ -66,15 +81,3 @@ jobs:
       - name: Push Docker image to ACR
         run: |
           docker push pfaacr.azurecr.io/purchases-ms:latest
-  codecov:
-    runs-on: ubuntu-latest
-    needs: build
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Upload code coverage report
-        uses: codecov/codecov-action@v2
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}

@@ -29,7 +29,7 @@ jobs:
         with:
           go-version-input: 1.22.2
           go-package: .
-        work-dir: pfa/auth-ms
+          work-dir: pfa/auth-ms
 
       - name: Build
         run: cd auth-ms && go build -o auth-ms-build .

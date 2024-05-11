@@ -28,7 +28,7 @@ jobs:
         uses: golang/govulncheck-action@v1      
         with:
           go-version-input: 1.22.2
-          go-package: ./pfa/auth-ms
+          go-package: pfa/auth-ms
 
       - name: Build
         run: cd auth-ms && go build -o auth-ms-build .
@@ -40,7 +40,7 @@ jobs:
             echo "Tests failed, stopping workflow."
             exit 1
           fi
-          
+
       - name: Upload code coverage report to Codecov
         uses: codecov/codecov-action@v2
         with:

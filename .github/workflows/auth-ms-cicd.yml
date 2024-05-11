@@ -25,13 +25,13 @@ jobs:
         run: cd auth-ms && go mod tidy
       
       - name: Print current directory
-        run: pwd
+        run: cd auth-ms
 
       - name: Dependency Vulnerability Scanning
         uses: golang/govulncheck-action@v1
         with:
           go-version-input: 1.22.2
-          go-package: ./auth-ms
+          go-package: ./...
           
 
       - name: Build

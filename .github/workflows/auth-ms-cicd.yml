@@ -24,11 +24,36 @@ jobs:
       - name: Install dependencies
         run: cd auth-ms && go mod tidy
       
+      - name: Dependency Vulnerability Scanning
+        uses: golang/govulncheck-action@v1      
+        with:
+          go-version-input: 1.22.2
+          go-package: ./pfa/auth-ms
+
       - name: Build
         run: cd auth-ms && go build -o auth-ms-build .
         
       - name: Test
-        run: cd auth-ms && go test
+        run: |
+          cd auth-ms
+          if ! go test; then
+            echo "Tests failed, stopping workflow."
+            exit 1
+          fi
+          
+      - name: Upload code coverage report to Codecov
+        uses: codecov/codecov-action@v2
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+
+      - name: Check Codecov report for errors
+        run: |
+          if [ -f codecov.txt ]; then
+            if grep -q 'error' codecov.txt; then
+              echo "Error found in Codecov report, stopping workflow."
+              exit 1
+            fi
+          fi
 
       - name: Create build directory
         run: mkdir build && cp auth-ms/auth-ms-build auth-ms/Dockerfile build
@@ -55,6 +80,10 @@ jobs:
       - name: Container Security Scanning
         run: |
           docker run --rm -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy image auth-ms:latest
+          if [ $? -ne 0 ]; then
+            echo "Security vulnerabilities found, stopping workflow."
+            exit 1
+          fi
         
       - name: Login to Azure Container Registry
         uses: azure/docker-login@v1

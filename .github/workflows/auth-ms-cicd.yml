@@ -29,9 +29,9 @@ jobs:
         shell: bash
 
       - name: Run govulncheck
-        run: govulncheck -show verbose ./pfa/auth-ms
+        run: cd auth-ms && govulncheck -show verbose .
         shell: bash    
-                    
+
       - name: Build
         run: cd auth-ms && go build -o auth-ms-build .
         

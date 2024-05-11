@@ -24,6 +24,9 @@ jobs:
       - name: Install dependencies
         run: cd auth-ms && go mod tidy
       
+      - name: Print current directory
+        run: pwd
+
       - name: Dependency Vulnerability Scanning
         uses: golang/govulncheck-action@v1
         with:

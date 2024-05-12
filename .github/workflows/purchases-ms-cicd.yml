@@ -28,11 +28,11 @@ jobs:
         run: |
           cd purchases-ms
           pip install pip-audit
-          pip-audit --json > safety-report.json && cat safety-report.json
+          pip-audit -o safety-report.txt  && cat safety-report.txt
 
       - name: Show Safety Report
         run: |
-          cat purchases-ms/safety-report.json
+          cat purchases-ms/safety-report.txt
   
       - name: Run tests
         env:

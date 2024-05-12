@@ -28,7 +28,7 @@ jobs:
         run: |
           cd purchases-ms
           pip install pip-audit
-          pip-audit -o safety-report.txt  && cat safety-report.txt
+          pip-audit --verbose -o safety-report.txt  && cat safety-report.txt
 
       - name: Show Safety Report
         run: |

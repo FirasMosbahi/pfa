@@ -23,6 +23,7 @@ resource "azurerm_kubernetes_cluster" "aks" {
     type = "SystemAssigned"
   }
 
+
   network_profile {
     load_balancer_sku = "basic"
     network_plugin    = "kubenet"

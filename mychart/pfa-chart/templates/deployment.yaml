@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-product-ms
+spec:
+  replicas: {{ .Values.productMS.replicas }}
+  selector:
+    matchLabels:
+      app: product-ms
+  template:
+    metadata:
+      labels:
+        app: product-ms
+    spec:
+      containers:
+        - name: product-ms
+          image: {{ .Values.productMS.image }}
+          ports:
+            - containerPort: {{ .Values.productMS.port }}      
+          env:
+            - name: DB_HOST
+              value: {{ .Values.productMS.dbHost }}
+            - name: PORT
+              value: "{{ .Values.productMS.port }}"
+            - name: JWT_SECRET
+              value: "{{ .Values.productMS.jwtSecret }}"
+      imagePullSecrets:
+        - name: {{ .Values.secrets.acr_secret_name }} 
+  
+
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-auth-ms
+spec:
+  replicas: {{ .Values.authMS.replicas }}
+  selector:
+    matchLabels:
+      app: auth-ms
+  template:
+    metadata:
+      labels:
+        app: auth-ms
+    spec:
+      containers:
+        - name: auth-ms
+          image: {{ .Values.authMS.image }}
+          ports:
+            - containerPort: {{ .Values.authMS.port }}
+          env:
+            - name: MONGODB_URI
+              value: {{ .Values.authMS.MongoDBURI }}
+            - name: DB_NAME
+              value: {{ .Values.authMS.DBName }}
+            - name: JWT_SECRET
+              value: "{{ .Values.authMS.jwtSecret }}"
+      imagePullSecrets:
+        - name: {{ .Values.secrets.acr_secret_name }}  

@@ -26,9 +26,8 @@ jobs:
 
       - name: Dependency Vulnerability Scanning (Python)
         run: |
-          cd purchases-ms
-          pip install safety --user
-          safety scan --full-report > safety-report.txt
+          cd purchases-ms && pip install safety --user
+          cd purchases-ms && safety scan --full-report > safety-report.txt
 
       - name: Show Safety Report
         run: |

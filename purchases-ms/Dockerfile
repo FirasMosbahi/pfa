@@ -7,11 +7,17 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-ENV PORT=5001 \
-    MONGODB_URI=mongodb+srv://firasmosbehi:firas@cluster0.br9usu1.mongodb.net/commerce \
-    MONGODB_DATABASE=commerce \
-    JWT_SECRET=secret \
-    PRODUCT_MS_URL=localhost:5000
+RUN ["touch" , ".env"]
+
+RUN ["echo", "PORT=$PORT" ,">>", ".env"]
+
+RUN ["echo", "MONGODB_DATABASE=$MONGODB_DATABASE", ">>", ".env"]
+
+RUN ["echo", "MONGODB_URI=$MONGODB_URI", ">>", ".env"]
+
+RUN ["echo" ,"JWT_SECRET=$JWT_SECRET", ">>" ,".env"]
+
+RUN ["echo" ,"PRODUCT_MS_URL=$PRODUCT_MS_URL", ">>" ,".env"]
 
 EXPOSE 5001
 

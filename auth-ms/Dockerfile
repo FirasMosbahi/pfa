@@ -9,7 +9,13 @@ RUN ["go" , "mod" , "tidy"]
 
 COPY . .
 
-RUN ["sh", "-c", "echo", "$MONGODB_URI" ,">", ".env" ,"&&", "echo", "$JWT_SECRET", ">>", ".env" ,"&&" ,"echo" ,"$DB_NAME", ">>" ,".env"]
+RUN ["touch" , ".env"]
+
+RUN ["echo", "MONGODB_URI=$MONGODB_URI" ,">>", ".env"]
+
+RUN ["echo", "JWT_SECRET=$JWT_SECRET", ">>", ".env"]
+
+RUN ["echo" ,"DB_NAME=$DB_NAME", ">>" ,".env"]
 
 RUN ["go", "build", "."]
 

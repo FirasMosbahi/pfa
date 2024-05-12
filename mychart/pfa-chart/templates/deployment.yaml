@@ -59,3 +59,38 @@ spec:
               value: "{{ .Values.authMS.jwtSecret }}"
       imagePullSecrets:
         - name: {{ .Values.secrets.acr_secret_name }}  
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-puchases-ms
+spec:
+  replicas: {{ .Values.authMS.replicas }}
+  selector:
+    matchLabels:
+      app: purchases-ms
+  template:
+    metadata:
+      labels:
+        app: purchases-ms
+    spec:
+      containers:
+        - name: purchases-ms
+          image: {{ .Values.purchasesMs.image }}
+          ports:
+            - containerPort: {{ .Values.purchasesMs.port }}
+          env:
+            - name: PORT
+              value: {{ .Values.purchasesMs.port }}
+            - name: PRODUCT_MS_URL
+              value: load-balancer:3000
+            - name: MONGODB_URI
+              value: {{ .Values.purchasesMs.MongoDBURI }}
+            - name: MONGODB_DATABASE
+              value: {{ .Values.purchasesMs.MongoDBDatabase }}
+            - name: JWT_SECRET
+              value: "{{ .Values.purchasesMs.JWTSecret }}"
+      imagePullSecrets:
+        - name: {{ .Values.secrets.acr_secret_name }}  

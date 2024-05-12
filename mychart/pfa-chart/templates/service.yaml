@@ -16,12 +16,27 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ .Release.Name }}-load-balancer2
+  name: load-balancer2
 spec:
   selector:
     app: auth-ms
   ports:
     - protocol: TCP
-      port: 5000
+      port: 8080
       targetPort: {{ .Values.authMS.port }}
   type: LoadBalancer
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: load-balancer3
+spec:
+  selector:
+    app: purchases-ms
+  ports:
+    - protocol: TCP
+      port: 5001
+      targetPort: {{ .Values.purchasesMs.port }}
+  type: LoadBalancer  

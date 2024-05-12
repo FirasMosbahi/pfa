@@ -15,3 +15,11 @@ authMS:
 
 secrets:
   acr_secret_name: pfaacr
+
+purchasesMs:
+  replicas: 1
+  image: pfaacr.azurecr.io/purchases-ms:latest
+  MongoDBURI: mongodb+srv://firasmosbehi:firas@cluster0.br9usu1.mongodb.net/
+  MongoDBDatabase: commerce
+  JWTSecret: secret
+  port: 5001

@@ -1,9 +1,9 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: product-ms
+  name: {{ .Release.Name }}-product-ms
 spec:
-  replicas: 3
+  replicas: {{ .Values.productMS.replicas }}
   selector:
     matchLabels:
       app: product-ms
@@ -14,24 +14,42 @@ spec:
     spec:
       containers:
         - name: product-ms
-          image: pfaacr.azurecr.io/products-ms:latest
+          image: {{ .Values.productMS.image }}
           ports:
-            - containerPort: 3000
+            - containerPort: {{ .Values.productMS.port }}
           env:
             - name: DB_HOST
-              value: mongodb+srv://firasmosbehi:firas@cluster0.br9usu1.mongodb.net/commerce
+              value: {{ .Values.productMS.dbHost }}
             - name: PORT
-              value: "3000"
+              value: "{{ .Values.productMS.port }}"
             - name: JWT_SECRET
-              value: secret 
+              value: "{{ .Values.productMS.jwtSecret }}"
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-auth-ms
+spec:
+  replicas: {{ .Values.authMS.replicas }}
+  selector:
+    matchLabels:
+      app: auth-ms
+  template:
+    metadata:
+      labels:
+        app: auth-ms
+    spec:
+      containers:
         - name: auth-ms
-          image: pfaacr.azurecr.io/auth-ms:latest
+          image: {{ .Values.authMS.image }}
           ports:
-            - containerPort: 5000
+            - containerPort: {{ .Values.authMS.port }}
           env:
             - name: DB_HOST
-              value: mongodb+srv://firasmosbehi:firas@cluster0.br9usu1.mongodb.net/commerce
+              value: {{ .Values.authMS.dbHost }}
             - name: PORT
-              value: "3000"
+              value: "{{ .Values.authMS.port }}"
             - name: JWT_SECRET
-              value: secret            
+              value: "{{ .Values.authMS.jwtSecret }}"

@@ -1,0 +1,13 @@
+productMS:
+  replicas: 3
+  image: pfaacr.azurecr.io/products-ms:latest
+  dbHost: mongodb+srv://firasmosbehi:firas@cluster0.br9usu1.mongodb.net/commerce
+  port: 3000
+  jwtSecret: secret
+
+authMS:
+  replicas: 1
+  image: pfaacr.azurecr.io/auth-ms:latest
+  dbHost: mongodb+srv://firasmosbehi:firas@cluster0.br9usu1.mongodb.net/commerce
+  port: 5000
+  jwtSecret: secret

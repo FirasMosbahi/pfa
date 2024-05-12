@@ -17,7 +17,7 @@ RUN ["echo", "MONGODB_URI=$MONGODB_URI", ">>", ".env"]
 
 RUN ["echo" ,"JWT_SECRET=$JWT_SECRET", ">>" ,".env"]
 
-RUN ["echo" ,"PRODUCT_MS_URL=$PRODUCT_MS_URL", ">>" ,".env"]
+RUN ["echo" ,"PRODUCT_MS_URL=$PRODUCT_MS_URL:$PRODUCT_MS_PORT", ">>" ,".env"]
 
 EXPOSE 5001
 

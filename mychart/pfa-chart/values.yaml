@@ -3,6 +3,7 @@ productMS:
   image: pfaacr.azurecr.io/products-ms:latest
   dbHost: mongodb+srv://firasmosbehi:firas@cluster0.br9usu1.mongodb.net/commerce
   port: 3000
+  stringPort: "3000"
   jwtSecret: secret
 
 authMS:
@@ -11,6 +12,7 @@ authMS:
   MongoDBURI: mongodb+srv://firasmosbehi:firas@cluster0.br9usu1.mongodb.net/
   DBName: commerce
   port: 8080
+  stringPort: "5000"
   jwtSecret: secret
 
 secrets:
@@ -23,3 +25,4 @@ purchasesMs:
   MongoDBDatabase: commerce
   JWTSecret: secret
   port: 5001
+  stringPort: 8080

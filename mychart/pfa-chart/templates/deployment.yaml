@@ -67,7 +67,7 @@ kind: Deployment
 metadata:
   name: {{ .Release.Name }}-puchases-ms
 spec:
-  replicas: {{ .Values.authMS.replicas }}
+  replicas: {{ .Values.purchasesMs.replicas }}
   selector:
     matchLabels:
       app: purchases-ms
@@ -83,11 +83,11 @@ spec:
             - containerPort: {{ .Values.purchasesMs.port }}
           env:
             - name: PORT
-              value: {{ .Values.purchasesMs.port }}
+              value: "{{ .Values.purchasesMs.port }}"
             - name: PRODUCT_MS_URL
               value: load-balancer
             - name: PRODUCT_MS_PORT
-              value: 3000  
+              value: "3000"  
             - name: MONGODB_URI
               value: {{ .Values.purchasesMs.MongoDBURI }}
             - name: MONGODB_DATABASE

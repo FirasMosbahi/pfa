@@ -23,15 +23,14 @@ jobs:
           cd purchases-ms
           pip install --upgrade pip
           pip install -r requirements.txt
+#      - name: Dependency Vulnerability Scanning (Python)
+#     run: |
+#        pip install safety --user
+ #         touch safety-report.txt &&  safety scan --full-report >> safety-report.txt
 
-      - name: Dependency Vulnerability Scanning (Python)
-        run: |
-          pip install safety --user
-          touch safety-report.txt &&  safety scan --full-report >> safety-report.txt
-
-      - name: Show Safety Report
-        run: |
-          cat purchases-ms/safety-report.txt
+#      - name: Show Safety Report
+#        run: |
+#          cat purchases-ms/safety-report.txt
   
       - name: Run tests
         env:

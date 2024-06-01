@@ -5,7 +5,8 @@ on:
     paths:
       - 'auth-ms/**'
       - '.github/workflows/auth-ms-cicd.yml'
-
+      
+      
 jobs:
   vulnerability-check:
     runs-on: ubuntu-latest  

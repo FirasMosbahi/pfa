@@ -7,8 +7,38 @@ on:
       - '.github/workflows/products-ms-cicd.yml'
 
 jobs:
+
+  check-vulnerability:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Use Node.js 20
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+
+      - name: Dependency Vulnerability Scanning
+        run: |
+          cd products-ms
+          npm audit --json > npm-audit.json
+          cat npm-audit.json
+          if [ -s npm-audit.json ]; then
+            if [ $(jq '.vulnerabilities' < npm-audit.json) != '{}' ]; then
+              jq -r '.advisories[] | "Vulnerability ID: \(.id)\nSeverity: \(.severity)\nTitle: \(.title)\nDescription: \(.overview)\n\n"' < npm-audit.json
+              echo "Vulnerabilities found, stopping workflow."
+              exit 1
+            else
+              echo "No vulnerabilities found."
+            fi
+            else
+              echo "npm-audit.json is empty."
+            fi      
+
   build:
     runs-on: ubuntu-latest
+    needs: check-vulnerability
 
     steps:
       - name: Checkout code
@@ -24,23 +54,25 @@ jobs:
           cd products-ms
           npm install
 
-      - name: Dependency Vulnerability Scanning
-        run: |
-          cd products-ms
-          npm audit --json > npm-audit.json
-          cat npm-audit.json
-          if [ -s npm-audit.json ]; then
-            if [ $(jq '.vulnerabilities' < npm-audit.json) != '{}' ]; then
-              jq -r '.advisories[] | "Vulnerability ID: \(.id)\nSeverity: \(.severity)\nTitle: \(.title)\nDescription: \(.overview)\n\n"' < npm-audit.json
-              echo "Vulnerabilities found, stopping workflow."
-              exit 1
-            else
-              echo "No vulnerabilities found."
-            fi
-          else
-            echo "npm-audit.json is empty."
-          fi
+      - name: build
+        run: cd products-ms && npm run build    
 
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: build-artifact
+          path: build-artifact
+
+  tests:
+    needs: build         
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Download build artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: build-artifact
+          path: auth-ms-build  
       - name: Run tests
         env:
           JWT_SECRET: ${{secrets.JWT_SECRET}}
@@ -67,22 +99,6 @@ jobs:
             fi
           fi
 
-      - name: Build NestJS app
-        run: |
-          cd products-ms
-          npm run build
-
-      - name: Create build directory
-        run: |
-          mkdir build
-          cp -r products-ms/dist build
-          cp products-ms/nest-cli.json products-ms/package.json products-ms/Dockerfile products-ms/.dockerignore build
-
-      - name: Create build artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: build-artifact
-          path: build
 
   build-docker-image:
     runs-on: ubuntu-latest

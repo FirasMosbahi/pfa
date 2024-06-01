@@ -29,6 +29,8 @@ jobs:
         shell: bash    
       - name: Run Horusec for static security analysis
         uses: fike/horusec-action@v0.2.2
+        with:
+          arguments: --project-path ./auth-ms --log-level info --disable-docker       
           
   build:
     needs: vulnerability-check

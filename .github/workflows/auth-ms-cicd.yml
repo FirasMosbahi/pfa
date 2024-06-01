@@ -30,7 +30,7 @@ jobs:
         
       - name: Get golangci-lint
         run: |
-          curl -sfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s v1.59.0  # You can update the version here
+          wget -O- -nv https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s v1.59.0 
         shell: bash
 
       - name: Run Static Test

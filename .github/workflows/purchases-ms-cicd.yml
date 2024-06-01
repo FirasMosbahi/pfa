@@ -5,10 +5,10 @@ on:
     paths:
       - 'purchases-ms/**'
       - '.github/workflows/purchases-ms-cicd.yml'
-      
+
 
 jobs:
-  build:
+  build-test:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -49,6 +49,10 @@ jobs:
             fi
           fi
 
+  delivery:
+    needs: build-test
+    runs-on: ubuntu-latest
+    steps:
       - name: Build Docker image
         run: |
           cd purchases-ms

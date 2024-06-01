@@ -6,6 +6,7 @@ on:
       - 'products-ms/**'
       - '.github/workflows/products-ms-cicd.yml'
 
+
 jobs:
 
   check-vulnerability:
@@ -58,7 +59,7 @@ jobs:
         run: cd products-ms && npm run build    
 
       - name: preprocess build artifact
-        run : rm -d products-ms/node_modules
+        run : rm -r products-ms/node_modules
 
       - name: Upload artifact
         uses: actions/upload-artifact@v3

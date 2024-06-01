@@ -27,10 +27,12 @@ jobs:
       - name: Run govulncheck
         run: cd auth-ms && govulncheck -show verbose .
         shell: bash    
-      - name: Run Horusec for static security analysis
-        uses: fike/horusec-action@v0.2.2
+        
+      - name: Run Static Test
+        uses: golangci/golangci-lint-action@v3
         with:
-          arguments: --project-path ./auth-ms --log-level info --disable-docker       
+          version: v1.56
+          args: --timeout 3m --config .golangci.yml     
           
   build:
     needs: vulnerability-check

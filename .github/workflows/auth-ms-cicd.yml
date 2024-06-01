@@ -27,7 +27,11 @@ jobs:
       - name: Run govulncheck
         run: cd auth-ms && govulncheck -show verbose .
         shell: bash    
-
+      - name: Run Horusec for static security analysis
+        uses: horuszup/horusec-action@v2
+        with:
+          path: auth-ms 
+          
   build:
     needs: vulnerability-check
     runs-on: ubuntu-latest

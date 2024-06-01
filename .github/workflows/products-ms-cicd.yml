@@ -58,7 +58,7 @@ jobs:
         run: cd products-ms && npm run build    
 
       - name: preprocess build artifact
-        run : rm -d products-ms/node-modules
+        run : rm -d products-ms/node_modules
 
       - name: Upload artifact
         uses: actions/upload-artifact@v3

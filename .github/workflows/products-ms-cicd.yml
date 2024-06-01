@@ -106,7 +106,7 @@ jobs:
           fi
 
 
-  build-docker-image:
+  build-and-deliver-docker-image:
     runs-on: ubuntu-latest
     needs: build
 

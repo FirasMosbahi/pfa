@@ -49,7 +49,7 @@ jobs:
             fi
           fi
 
-  delivery:
+  build-and-deliver-docker-image:
     needs: build-test
     runs-on: ubuntu-latest
     steps:

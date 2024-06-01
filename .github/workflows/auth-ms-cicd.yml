@@ -7,7 +7,7 @@ on:
       - '.github/workflows/auth-ms-cicd.yml'
 
 jobs:
-  build-test:
+  vulnerability-check:
     runs-on: ubuntu-latest  
     steps:
       - uses: actions/checkout@v3 
@@ -16,10 +16,6 @@ jobs:
         uses: actions/setup-go@v3
         with:
           go-version: 1.22.3
-          
-      - name: Add environment variables
-        run: |
-          cd auth-ms && touch .env && echo 'MONGODB_URI=${{secrets.DB_HOST}}' >> .env && echo 'JWT_SECRET=${{secrets.JWT_SECRET}}' >> .env && echo 'DB_NAME=${{secrets.DB_NAME}}' >> .env && cat .env
       
       - name: Install dependencies
         run: cd auth-ms && go mod tidy
@@ -32,9 +28,20 @@ jobs:
         run: cd auth-ms && govulncheck -show verbose .
         shell: bash    
 
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3 
+      - name: Add environment variables
+        run: |
+          cd auth-ms && touch .env && echo 'MONGODB_URI=${{secrets.DB_HOST}}' >> .env && echo 'JWT_SECRET=${{secrets.JWT_SECRET}}' >> .env && echo 'DB_NAME=${{secrets.DB_NAME}}' >> .env && cat .env
       - name: Build
         run: cd auth-ms && go build -o auth-ms-build .
-        
+  
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3     
       - name: Test
         run: |
           cd auth-ms
@@ -68,7 +75,7 @@ jobs:
   
   build-docker-image:
     runs-on: ubuntu-latest
-    needs: build-test
+    needs: test
     steps:
       - name: Checkout code
         uses: actions/checkout@v3

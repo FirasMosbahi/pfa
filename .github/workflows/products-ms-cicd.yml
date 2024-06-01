@@ -61,7 +61,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: build-artifact
-          path: build-artifact
+          path: products-ms
 
   tests:
     needs: build         

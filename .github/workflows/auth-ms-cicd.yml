@@ -28,11 +28,13 @@ jobs:
         run: cd auth-ms && govulncheck -show verbose .
         shell: bash    
         
+      - name: Get golangci-lint
+        run: |
+          curl -sfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s v1.59.0  # You can update the version here
+        shell: bash
+
       - name: Run Static Test
-        uses: golangci/golangci-lint-action@v3
-        with:
-          version: v1.56
-          args: --timeout 3m --config .golangci.yml     
+        run: cd auth-ms && golangci-lint run   
           
   build:
     needs: vulnerability-check

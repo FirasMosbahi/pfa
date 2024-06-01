@@ -57,11 +57,14 @@ jobs:
       - name: build
         run: cd products-ms && npm run build    
 
+      - name: preprocess build artifact
+        run : rm -d products-ms/node-modules
+
       - name: Upload artifact
         uses: actions/upload-artifact@v3
         with:
           name: build-artifact
-          path: products-ms
+          path: products-ms 
 
   tests:
     needs: build         
@@ -72,14 +75,16 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: build-artifact
-          path: auth-ms-build  
+          path: build-artifact
+      - name: post process artifact
+        run: cd build-artifact && npm i  
       - name: Run tests
         env:
           JWT_SECRET: ${{secrets.JWT_SECRET}}
           DB_HOST: ${{secrets.DB_HOST}}/${{secrets.DB_NAME}}
           PORT: ${{secrets.PRODUCT_MS_PORT}}
         run: |
-          cd products-ms
+          cd build-artifact
           if ! npm test; then
             echo "Tests failed, stopping workflow."
             exit 1

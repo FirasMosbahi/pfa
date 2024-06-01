@@ -28,7 +28,7 @@ jobs:
         run: cd auth-ms && govulncheck -show verbose .
         shell: bash    
       - name: Run Horusec for static security analysis
-        uses: horuszup/horusec-action@v2
+        uses: fike/horusec-action@v0.2.2
         with:
           path: auth-ms 
           

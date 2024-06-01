@@ -148,27 +148,5 @@ jobs:
         run: |
           docker push pfaacr.azurecr.io/products-ms:latest
 
-  terraform-apply:
-    runs-on: ubuntu-latest
-    steps:
-      - name: checkout code
-        uses: actions/checkout@v3
 
-      - name: install azure cli
-        uses: elstudio/action-install-azure-cli@v1
-        
-      - name: login to azure
-        uses: az login -u mohamedamine.guesmi@insat.u-carthage.tn -p warcommanderWARCMMANDER1234
-          
-      - name: Install Terraform
-        run: |
-          curl -fsSL https://apt.releases.hashicorp.com/gpg | apt-key add -
-          apt-add repository ppa:hashicorp/terraform
-          apt-get update && apt-get install -y terraform
-                     
-      - name: Apply Terraform configuration
-        run: |
-          cd terraform 
-          terraform init
-          terraform apply -auto-approve
                   

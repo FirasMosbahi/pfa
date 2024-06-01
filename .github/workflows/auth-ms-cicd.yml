@@ -31,10 +31,11 @@ jobs:
       - name: Get golangci-lint
         run: |
           curl -sfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s v1.59.0
+          chmod +x ./bin/golangci-lint
         shell: bash
 
       - name: Run Static Test
-        run: cd auth-ms && ./bin/golangci-lint run  
+        run: cd auth-ms && ../bin/golangci-lint run 
           
   build:
     needs: vulnerability-check

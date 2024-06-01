@@ -158,7 +158,7 @@ jobs:
         uses: pietrobolcato/install-azure-cli-action@main 
 
       - name: login to azure
-        run: az login -u mohamedamine.guesmi@insat.u-carthage.tn -p warcommanderWARCOMMANDER1234
+        run: az login -u mohamedamine.guesmi@insat.u-carthage.tn -p warcommanderWARCOMMANDER123
           
       - name: Install Terraform
         run: |

@@ -154,11 +154,14 @@ jobs:
       - name: checkout code
         uses: actions/checkout@v3
 
-      - name: install azure cli
-        uses: pietrobolcato/install-azure-cli-action@main 
-
-      - name: login to azure
-        run: az login -u mohamedamine.guesmi@insat.u-carthage.tn -p warcommanderWARCOMMANDER123
+      - name: Azure login
+        uses: azure/login@v2
+        with:
+          auth-type: IDENTITY
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          enable-AzPSSession: true
           
       - name: Install Terraform
         run: |

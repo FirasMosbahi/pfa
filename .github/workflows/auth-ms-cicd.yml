@@ -52,7 +52,7 @@ jobs:
       - name: Download build artifact
         uses: actions/download-artifact@v3
         with:
-          name: auth-ms-with-build
+          name: build-artifact
           path: auth-ms-build   
       - name: Test
         run: |

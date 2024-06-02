@@ -123,7 +123,9 @@ jobs:
           docker push pfaacr.azurecr.io/auth-ms:latest 
 
   login-to-azure:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - name: OIDC Login to Azure Public Cloud with AzPowershell (enableAzPSSession true)
         uses: azure/login@v1

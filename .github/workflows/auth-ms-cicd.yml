@@ -128,14 +128,20 @@ jobs:
       contents: write
       id-token: write
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
       - name: OIDC Login to Azure Public Cloud with AzPowershell (enableAzPSSession true)
         uses: azure/login@v1
         with:
-          creds: ${{secrets.AZURE_CREDENTIALS}}
-
-      - name: 'Get resource group with PowerShell action'
-        uses: azure/powershell@v1
-        with:
-          inlineScript: |
-            Get-AzResourceGroup
-          azPSVersion: "latest"        
+          creds: ${{secrets.AZURE_CREDENTIALS}}      
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v1
+    
+      - name: Terraform Init
+        run: cd terraform && terraform init
+    
+      - name: Terraform Plan
+        run: cd terraform && terraform plan
+    
+      - name: Terraform Apply
+        run: cd terraform && terraform apply -auto-approve

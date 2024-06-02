@@ -131,10 +131,7 @@ jobs:
       - name: OIDC Login to Azure Public Cloud with AzPowershell (enableAzPSSession true)
         uses: azure/login@v1
         with:
-          client-id: "5aa379ac-a7fd-40c3-acb9-6d524f4991c4"
-          tenant-id: "dbd6664d-4eb9-46eb-99d8-5c43ba153c61"
-          subscription-id: "0cd54a1c-7281-4a32-8fb5-b3782d51ebf7"
-          enable-AzPSSession: true
+          creds: ${{secrets.AZURE_CREDENTIALS}}
 
       - name: 'Get resource group with PowerShell action'
         uses: azure/powershell@v1

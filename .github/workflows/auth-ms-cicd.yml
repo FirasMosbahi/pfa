@@ -5,6 +5,7 @@ on:
     paths:
       - 'auth-ms/**'
       - '.github/workflows/auth-ms-cicd.yml'
+      
 
 jobs:
   vulnerability-check:
@@ -27,7 +28,16 @@ jobs:
       - name: Run govulncheck
         run: cd auth-ms && govulncheck -show verbose .
         shell: bash    
+        
+      - name: Get golangci-lint
+        run: |
+          curl -sfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s v1.59.0
+          chmod +x ./bin/golangci-lint
+        shell: bash
 
+      - name: Run Static Test
+        run: cd auth-ms && ../bin/golangci-lint run 
+          
   build:
     needs: vulnerability-check
     runs-on: ubuntu-latest
@@ -76,11 +86,11 @@ jobs:
             fi
           fi
   
-  build-docker-image:
+  build-and-deliver-docker-image:
     runs-on: ubuntu-latest
     needs: test
     steps:
-      - name: Checkout code
+      - name: Checkout code 
         uses: actions/checkout@v3
         
       - name: Set up Docker Buildx
@@ -111,3 +121,45 @@ jobs:
       - name: Push Docker image to ACR
         run: |
           docker push pfaacr.azurecr.io/auth-ms:latest 
+
+  infrastructure-provision:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: OIDC Login to Azure Public Cloud with AzPowershell (enableAzPSSession true)
+        uses: azure/login@v1
+        with:
+          creds: ${{secrets.AZURE_CREDENTIALS}}      
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v1
+    
+      - name: Terraform Init
+        run: cd terraform && terraform init
+    
+      - name: Terraform Plan
+        run: cd terraform && terraform plan
+    
+      - name: Terraform Apply
+        run: cd terraform && terraform apply -auto-approve
+
+  deplyment:
+    runs-on: ubuntu-latest
+    needs: infrastructure-provision
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: OIDC Login to Azure Public Cloud with AzPowershell (enableAzPSSession true)
+        uses: azure/login@v1
+        with:
+          creds: ${{secrets.AZURE_CREDENTIALS}} 
+      - name: link azure aks with kubernetes
+        run: az aks get-credentials --name pfaaks --resource-group pfa-rg-4
+      - name: create a secret for acr and aks
+        run: kubectl create secret docker-registry secretpfa --docker-server=pfaacr.azurecr.io --docker-username=${{secrets.ACR_USERNAME}} --docker-password=${{secrets.ACR_PASSWORD}}
+      - name: deployment
+        run: cd mychart && helm install pfa-chart pfa-chart     
+        

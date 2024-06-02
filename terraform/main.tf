@@ -24,3 +24,17 @@ resource "azurerm_kubernetes_cluster" "aks" {
     network_plugin    = "kubenet"
   }
 }
+
+data "azurerm_client_config" "current" {}
+
+output "subscription_id" {
+  value = data.azurerm_client_config.current.subscription_id
+}
+
+output "client_id" {
+  value = data.azurerm_client_config.current.client_id
+}
+
+output "tenant_id" {
+  value = data.azurerm_client_config.current.tenant_id
+}

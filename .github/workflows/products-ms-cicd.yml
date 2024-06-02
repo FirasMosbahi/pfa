@@ -6,9 +6,40 @@ on:
       - 'products-ms/**'
       - '.github/workflows/products-ms-cicd.yml'
 
+
 jobs:
+
+  check-vulnerability:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Use Node.js 20
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+
+      - name: Dependency Vulnerability Scanning
+        run: |
+          cd products-ms
+          npm audit --json > npm-audit.json
+          cat npm-audit.json
+          if [ -s npm-audit.json ]; then
+            if [ $(jq '.vulnerabilities' < npm-audit.json) != '{}' ]; then
+              jq -r '.advisories[] | "Vulnerability ID: \(.id)\nSeverity: \(.severity)\nTitle: \(.title)\nDescription: \(.overview)\n\n"' < npm-audit.json
+              echo "Vulnerabilities found, stopping workflow."
+              exit 1
+            else
+              echo "No vulnerabilities found."
+            fi
+            else
+              echo "npm-audit.json is empty."
+            fi      
+
   build:
     runs-on: ubuntu-latest
+    needs: check-vulnerability
 
     steps:
       - name: Checkout code
@@ -24,30 +55,37 @@ jobs:
           cd products-ms
           npm install
 
-      - name: Dependency Vulnerability Scanning
-        run: |
-          cd products-ms
-          npm audit --json > npm-audit.json
-          cat npm-audit.json
-          if [ -s npm-audit.json ]; then
-            if [ $(jq '.vulnerabilities' < npm-audit.json) != '{}' ]; then
-              jq -r '.advisories[] | "Vulnerability ID: \(.id)\nSeverity: \(.severity)\nTitle: \(.title)\nDescription: \(.overview)\n\n"' < npm-audit.json
-              echo "Vulnerabilities found, stopping workflow."
-              exit 1
-            else
-              echo "No vulnerabilities found."
-            fi
-          else
-            echo "npm-audit.json is empty."
-          fi
+      - name: build
+        run: cd products-ms && npm run build    
 
+      - name: preprocess build artifact
+        run : rm -r products-ms/node_modules
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: build-artifact
+          path: products-ms 
+
+  tests:
+    needs: build         
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Download build artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: build-artifact
+          path: build-artifact
+      - name: post process artifact
+        run: cd build-artifact && npm i  
       - name: Run tests
         env:
           JWT_SECRET: ${{secrets.JWT_SECRET}}
           DB_HOST: ${{secrets.DB_HOST}}/${{secrets.DB_NAME}}
           PORT: ${{secrets.PRODUCT_MS_PORT}}
         run: |
-          cd products-ms
+          cd build-artifact
           if ! npm test; then
             echo "Tests failed, stopping workflow."
             exit 1
@@ -67,26 +105,10 @@ jobs:
             fi
           fi
 
-      - name: Build NestJS app
-        run: |
-          cd products-ms
-          npm run build
 
-      - name: Create build directory
-        run: |
-          mkdir build
-          cp -r products-ms/dist build
-          cp products-ms/nest-cli.json products-ms/package.json products-ms/Dockerfile products-ms/.dockerignore build
-
-      - name: Create build artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: build-artifact
-          path: build
-
-  build-docker-image:
+  build-and-deliver-docker-image:
     runs-on: ubuntu-latest
-    needs: build
+    needs: tests
 
     steps:
       - name: Checkout code
@@ -126,3 +148,31 @@ jobs:
       - name: Push Docker image to ACR
         run: |
           docker push pfaacr.azurecr.io/products-ms:latest
+
+#  terraform-apply:
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: checkout code
+#        uses: actions/checkout@v3
+#
+#      - name: Azure login
+#        uses: azure/login@v2
+#        with:
+#          auth-type: IDENTITY
+#          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+#          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+#          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+#          enable-AzPSSession: true
+#          
+#      - name: Install Terraform
+#        run: |
+#          curl -fsSL https://apt.releases.hashicorp.com/gpg | apt-key add -
+#          apt-add repository ppa:hashicorp/terraform
+#          apt-get update && apt-get install -y terraform
+#                     
+#      - name: Apply Terraform configuration
+#        run: |
+#          cd terraform
+#          terraform init
+#          terraform apply -auto-approve
+                  

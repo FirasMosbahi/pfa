@@ -122,7 +122,7 @@ jobs:
         run: |
           docker push pfaacr.azurecr.io/auth-ms:latest 
 
-  login-to-azure:
+  infrastructure-provision:
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -145,3 +145,20 @@ jobs:
     
       - name: Terraform Apply
         run: cd terraform && terraform apply -auto-approve
+
+  deplyment:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: OIDC Login to Azure Public Cloud with AzPowershell (enableAzPSSession true)
+        uses: azure/login@v1
+        with:
+          creds: ${{secrets.AZURE_CREDENTIALS}} 
+      - name: link azure aks with kubernetes
+        run: az aks get-credentials --name pfaaks --resource-group pfa-rg-4
+      - name: create a secret for acr and aks
+        run: kubectl create secret docker-registry secretpfa --docker-server=pfaacr.azurecr.io --docker-username=${{secrets.ACR_USERNAME}} --docker-password=${{secrets.ACR_PASSWORD}}
+      - name: deployment
+        run: cd mychart && helm install pfa-chart pfa-chart     
+        

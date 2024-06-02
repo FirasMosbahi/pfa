@@ -1,4 +1,4 @@
 apiVersion: v2
 name: mychart
 description: A Helm chart for deploying product-ms and auth-ms
-version: 0.1.9
+version: 0.1.14

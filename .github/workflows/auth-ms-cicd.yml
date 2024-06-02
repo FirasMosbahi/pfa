@@ -90,7 +90,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: test
     steps:
-      - name: Checkout code
+      - name: Checkout code 
         uses: actions/checkout@v3
         
       - name: Set up Docker Buildx
@@ -121,3 +121,21 @@ jobs:
       - name: Push Docker image to ACR
         run: |
           docker push pfaacr.azurecr.io/auth-ms:latest 
+
+  login-to-azure:
+    runs-on: windows-latest
+    steps:
+      - name: OIDC Login to Azure Public Cloud with AzPowershell (enableAzPSSession true)
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }} 
+          enable-AzPSSession: true
+
+      - name: 'Get resource group with PowerShell action'
+        uses: azure/powershell@v1
+        with:
+          inlineScript: |
+            Get-AzResourceGroup
+          azPSVersion: "latest"        

@@ -16,7 +16,7 @@ authMS:
   jwtSecret: secret
 
 secrets:
-  acr_secret_name: pfaacr
+  acr_secret_name: secretpfa
 
 purchasesMs:
   replicas: 1

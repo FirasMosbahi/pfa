@@ -10,14 +10,11 @@ resource "azurerm_kubernetes_cluster" "aks" {
     name                = "default"
     node_count          = var.system_node_count
     vm_size             = "Standard_B2s"
-#    type                = "VirtualMachineScaleSets"
-#    enable_auto_scaling = false
   }
 
   identity {
     type = "SystemAssigned"
   }
-
 
   network_profile {
     load_balancer_sku = "basic"
@@ -25,13 +22,18 @@ resource "azurerm_kubernetes_cluster" "aks" {
   }
 }
 
+resource "azurerm_resource_group" "tfstate" {
+  name     = "${var.terraform_storage_name}-rg"
+  location = var.location
+}
+
 resource "azurerm_storage_account" "tfstate" {
-  name                  = var.terraform_storage_name + "-sa"
-  resource_group_name  = var.resource_group_name
-  location              = azurerm_resource_group.tfstate.location
-  account_tier          = "Standard"
+  name                     = "${var.terraform_storage_name}sa"
+  resource_group_name      = var.resource_group_name
+  location                 = var.location
+  account_tier             = "Standard"
   account_replication_type = "LRS"
-  allow_nested_items_to_be_public = false
+  allow_blob_public_access = false
 
   tags = {
     environment = "staging"
@@ -41,5 +43,6 @@ resource "azurerm_storage_account" "tfstate" {
 resource "azurerm_storage_container" "tfstate" {
   name                  = "tfstate"
   storage_account_name  = azurerm_storage_account.tfstate.name
+  resource_group_name   = var.resource_group_name
   container_access_type = "private"
 }

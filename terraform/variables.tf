@@ -24,9 +24,23 @@ variable "system_node_count" {
 }
 
 variable "node_resource_group" {
-  default = "pfa-node"
+  type        = string
+  description = "RG name for cluster resources in Azure"
+  default     = "pfa-node"
 }
 
 variable "terraform_storage_name" {
-  default = "pfatf"
+  type        = string
+  description = "Terraform backend storage account name"
+  default     = "pfatf"
+}
+
+variable "terraform_storage_account_name" {
+  type        = string
+  description = "Storage account name for Terraform state"
+}
+
+variable "terraform_container_name" {
+  type        = string
+  description = "Container name for Terraform state"
 }

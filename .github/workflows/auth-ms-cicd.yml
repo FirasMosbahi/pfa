@@ -141,7 +141,9 @@ jobs:
         run: cd terraform && terraform init
     
       - name: Terraform Plan
-        run: cd terraform && terraform plan
+        run: |
+            cd terraform 
+            terraform plan -backend-config=backend.tfvars
     
       - name: Terraform Apply
         run: cd terraform && terraform apply -auto-approve

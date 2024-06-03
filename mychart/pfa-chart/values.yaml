@@ -12,7 +12,7 @@ authMS:
   MongoDBURI: mongodb+srv://firasmosbehi:firas@cluster0.br9usu1.mongodb.net/
   DBName: commerce
   port: 8080
-  stringPort: "5000"
+  stringPort: "8080"
   jwtSecret: secret
 
 secrets:
@@ -25,4 +25,4 @@ purchasesMs:
   MongoDBDatabase: commerce
   JWTSecret: secret
   port: 5001
-  stringPort: 8080
+  stringPort: 5001

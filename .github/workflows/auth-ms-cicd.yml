@@ -180,5 +180,5 @@ jobs:
         #      - name: create a secret for acr and aks
         #        run: kubectl create secret docker-registry secretpfa --docker-server=pfaacr.azurecr.io --docker-username=${{secrets.ACR_USERNAME}} --docker-password=${{secrets.ACR_PASSWORD}}
       - name: deployment
-        run: cd mychart && helm install pfa-chart pfa-chart        
+        run: cd mychart && helm install pfa-chart pfa-chart
         

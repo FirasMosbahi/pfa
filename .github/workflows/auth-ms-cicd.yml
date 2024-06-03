@@ -122,31 +122,32 @@ jobs:
   #       run: |
   #         docker push pfaacr.azurecr.io/auth-ms:latest 
 
-  # infrastructure-provision:
-  #   runs-on: ubuntu-latest
-  #   permissions:
-  #     contents: write
-  #     id-token: write
-  #   steps:
-  #     - name: Checkout repository
-  #       uses: actions/checkout@v2
-  #     - name: OIDC Login to Azure Public Cloud with AzPowershell (enableAzPSSession true)
-  #       uses: azure/login@v1
-  #       with:
-  #         creds: ${{secrets.AZURE_CREDENTIALS}}      
-  #     - name: Set up Terraform
-  #       uses: hashicorp/setup-terraform@v1
+  infrastructure-provision:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: OIDC Login to Azure Public Cloud with AzPowershell (enableAzPSSession true)
+        uses: azure/login@v1
+        with:
+          creds: ${{secrets.AZURE_CREDENTIALS}}      
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v1
     
-  #     - name: Terraform Init
-  #       run: cd terraform && terraform init --backend-config=backend.tfvars
+      - name: Terraform Init
+        run: cd terraform && terraform init --backend-config=backend.tfvars
     
-  #     - name: Terraform Plan
-  #       run: |
-  #           cd terraform 
-  #           terraform plan 
+      - name: Terraform Plan
+        run: |
+            cd terraform 
+            terraform destroy -auto-approve
+            terraform plan 
     
-  #     - name: Terraform Apply
-  #       run: cd terraform && terraform apply -auto-approve
+      - name: Terraform Apply
+        run: cd terraform && terraform apply -auto-approve
   
 
   deplyment:
@@ -187,7 +188,7 @@ jobs:
           cd mychart
           helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
           helm repo update
-          helm install prometheus prometheus-community/prometheus
+          # helm install prometheus prometheus-community/prometheus
           kubectl get all
           kubectl get service
           kubectl expose service prometheus-server --type=NodePort --target-port=9090 --name=prometheus-server-ext

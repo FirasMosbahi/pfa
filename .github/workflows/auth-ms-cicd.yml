@@ -195,3 +195,4 @@ jobs:
           helm repo add grafana https://grafana.github.io/helm-charts
           helm install grafana grafana/grafana --version 7.3.11
           kubectl expose service grafana --type=LoadBalancer --target-port=3000 --name=grafana-ext
+          kubectl expose service my-prometheus-server --type=LoadBalancer --target-port=9090 --name=promethus-ext

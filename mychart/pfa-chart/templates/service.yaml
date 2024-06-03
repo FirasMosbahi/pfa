@@ -7,11 +7,15 @@ spec:
     app: ""
   ports:
     - protocol: TCP
+      name: product-ms
       port: 8080
-      targetPort: {{ .Values.productMS.port }}
+      targetPort: {{ .Values.productMS.port }}  
+    - protocol: TCP
+      name: auth-ms
       port: 8081 
       targetPort: {{ .Values.authMS.port }} 
     - protocol: TCP
+      name: purchases-ms
       port: 8082 
       targetPort: {{ .Values.purchasesMs.port }}
   type: LoadBalancer

@@ -187,8 +187,11 @@ jobs:
         run: |
           cd mychart
           helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
-          helm repo add grafana https://grafana.github.io/helm-charts
+          helm repo add stable https://charts.helm.sh/stable
           helm repo update
-          helm install pfa-chart pfa-chart
-          kubectl expose service prometheus-grafana --type=LoadBalancer --target-port=30300 --name=prometheus-grafana-ext
+          helm install prometheus prometheus-community/kube-prometheus-stack
+          kubectl port-forward deployment/prometheus-grafana 3000
+          # helm repo update
+          # helm install pfa-chart pfa-chart
+          # kubectl expose service prometheus-grafana --type=LoadBalancer --target-port=30300 --name=prometheus-grafana-ext
         

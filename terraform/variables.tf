@@ -27,3 +27,8 @@ variable "node_resource_group" {
   type        = string
   description = "RG name for cluster resources in Azure"
 }
+
+variable "terraform_storage_name" {
+  type        = string
+  description = "terraform backend resource group name"
+}

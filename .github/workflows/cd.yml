@@ -25,7 +25,7 @@ jobs:
         uses: hashicorp/setup-terraform@v1
     
       - name: Terraform Init
-        run: cd terraform && terraform init --backend-config=terraform.tfstate
+        run: cd terraform && terraform init 
     
       - name: Terraform Plan
         run: |

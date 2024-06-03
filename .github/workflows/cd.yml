@@ -83,7 +83,7 @@ jobs:
           helm install grafana grafana/grafana --version 7.3.11
           kubectl expose service grafana --type=LoadBalancer --target-port=3000 --name=grafana-ext
           kubectl expose service my-prometheus-server --type=LoadBalancer --target-port=9090 --name=promethus-ext
-
+        continue-on-error: true  
       - name: Get deployments status
         run: |
           kubectl wait --for=condition=available deployments --all --timeout=3000s

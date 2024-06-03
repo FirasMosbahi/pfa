@@ -26,3 +26,7 @@ purchasesMs:
   JWTSecret: secret
   port: 5001
   stringPort: "5001"
+
+metadata:
+  labels:
+    app: pfa-service

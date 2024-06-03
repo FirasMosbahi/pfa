@@ -210,7 +210,7 @@ jobs:
           echo kubectl get pods  
       - name: Get services status
         run: |
-          kubectl wait --for=condition=ready services --all --timeout=3000s
+          .github/scripts/check_loadbalancers.sh
           echo "All services are ready"
           echo kubectl get services
 

@@ -6,11 +6,11 @@ spec:
   replicas: {{ .Values.productMS.replicas }}
   selector:
     matchLabels:
-      app: product-ms
+      app: pfa-service
   template:
     metadata:
       labels:
-        app: {{.Values.metadata.labels.app}}
+        app: pfa-service
     spec:
       containers:
         - name: product-ms
@@ -25,9 +25,7 @@ spec:
             - name: JWT_SECRET
               value: "{{ .Values.productMS.jwtSecret }}"
       imagePullSecrets:
-        - name: {{ .Values.secrets.acr_secret_name }} 
-  
-
+        - name: {{ .Values.secrets.acr_secret_name }}
 
 ---
 
@@ -39,11 +37,11 @@ spec:
   replicas: {{ .Values.authMS.replicas }}
   selector:
     matchLabels:
-      app: auth-ms
+      app: pfa-service
   template:
     metadata:
       labels:
-        app: {{.Values.metadata.labels.app}}
+        app: pfa-service
     spec:
       containers:
         - name: auth-ms
@@ -58,23 +56,23 @@ spec:
             - name: JWT_SECRET
               value: "{{ .Values.authMS.jwtSecret }}"
       imagePullSecrets:
-        - name: {{ .Values.secrets.acr_secret_name }}  
+        - name: {{ .Values.secrets.acr_secret_name }}
 
 ---
 
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Release.Name }}-puchases-ms
+  name: {{ .Release.Name }}-purchases-ms
 spec:
   replicas: {{ .Values.purchasesMs.replicas }}
   selector:
     matchLabels:
-      app: purchases-ms
+      app: pfa-service
   template:
     metadata:
       labels:
-        app: {{.Values.metadata.labels.app}}
+        app: pfa-service
     spec:
       containers:
         - name: purchases-ms

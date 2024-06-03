@@ -38,7 +38,7 @@ resource "azurerm_storage_account" "tfstate" {
   }
 }
 
-rresource "azurerm_storage_account" "tfstate" {
+resource "azurerm_storage_account" "tfstate" {
   name                  = var.terraform_storage_name + "-sa"
   resource_group_name  = var.resource_group_name
   location              = azurerm_resource_group.tfstate.location

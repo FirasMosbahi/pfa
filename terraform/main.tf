@@ -5,6 +5,7 @@ resource "azurerm_kubernetes_cluster" "aks" {
   resource_group_name = var.resource_group_name
   dns_prefix          = var.cluster_name
   node_resource_group = var.node_resource_group
+  
 
   default_node_pool {
     name                = "default"
@@ -23,25 +24,4 @@ resource "azurerm_kubernetes_cluster" "aks" {
     load_balancer_sku = "basic"
     network_plugin    = "kubenet"
   }
-}
-
-resource "azurerm_resource_group" "tfstate" {
-  name     = "tfstate"
-  location = "East US"
-}
-
-resource "azurerm_storage_account" "tfstate" {
-  name                     = "tfstatepfa"
-  resource_group_name      = azurerm_resource_group.tfstate.name
-  location                 = azurerm_resource_group.tfstate.location
-  account_tier             = "Standard"
-  account_replication_type = "LRS"
-  allow_blob_public_access = true
-
-}
-
-resource "azurerm_storage_container" "tfstate" {
-  name                  = "tfstate"
-  storage_account_name  = azurerm_storage_account.tfstate.name
-  container_access_type = "blob"
 }

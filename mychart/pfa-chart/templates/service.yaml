@@ -4,7 +4,7 @@ metadata:
   name: all-apps-load-balancer
 spec:
   selector:
-    app: ""
+    app: {{.Values.metadata.labels.app}}
   ports:
     - protocol: TCP
       name: product-ms
@@ -19,3 +19,5 @@ spec:
       port: 5000 
       targetPort: {{ .Values.purchasesMs.port }}
   type: LoadBalancer
+
+

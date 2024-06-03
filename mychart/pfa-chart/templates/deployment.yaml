@@ -10,7 +10,7 @@ spec:
   template:
     metadata:
       labels:
-        app: product-ms
+        app: {{.Values.metadata.labels.app}}
     spec:
       containers:
         - name: product-ms
@@ -43,7 +43,7 @@ spec:
   template:
     metadata:
       labels:
-        app: auth-ms
+        app: {{.Values.metadata.labels.app}}
     spec:
       containers:
         - name: auth-ms
@@ -74,7 +74,7 @@ spec:
   template:
     metadata:
       labels:
-        app: purchases-ms
+        app: {{.Values.metadata.labels.app}}
     spec:
       containers:
         - name: purchases-ms
@@ -95,4 +95,4 @@ spec:
             - name: JWT_SECRET
               value: "{{ .Values.purchasesMs.JWTSecret }}"
       imagePullSecrets:
-        - name: {{ .Values.secrets.acr_secret_name }}  
+        - name: {{ .Values.secrets.acr_secret_name }}

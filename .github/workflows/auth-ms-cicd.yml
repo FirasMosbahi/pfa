@@ -152,7 +152,7 @@ jobs:
 
   deplyment:
     runs-on: ubuntu-latest
-    # needs: infrastructure-provision
+    needs: infrastructure-provision
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2

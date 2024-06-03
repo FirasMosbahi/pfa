@@ -1,5 +1,5 @@
 resource_group_name = "pfa"
-location            = "West Europe"
+location            = "Central US"
 cluster_name        = "pfaaks"
 kubernetes_version  = "1.28.9"
 system_node_count   = 1

@@ -196,3 +196,27 @@ jobs:
           helm install grafana grafana/grafana --version 7.3.11
           kubectl expose service grafana --type=LoadBalancer --target-port=3000 --name=grafana-ext
           kubectl expose service my-prometheus-server --type=LoadBalancer --target-port=9090 --name=promethus-ext
+
+      - name: Get deployments status
+        run: |
+          kubectl wait --for=condition=available deployments --all --timeout=3000s
+          echo "All deployments are available"
+          echo kubectl get deployments
+
+      - name: Get pods status
+        run: |
+          kubectl wait --for=condition=ready pods --all --timeout=3000s
+          echo "All pods are ready"
+          echo kubectl get pods  
+      - name: Get services status
+        run: |
+          kubectl wait --for=condition=ready services --all --timeout=3000s
+          echo "All services are ready"
+          echo kubectl get services
+
+      - name: get grafana and promethus url
+        run: |
+          echo "Grafana URL: http://$(kubectl get svc grafana-ext -o jsonpath='{.status.loadBalancer.ingress[0].ip}'):80"
+          echo "Prometheus URL: http://$(kubectl get svc promethus-ext -o jsonpath='{.status.loadBalancer.ingress[0].ip}'):80"
+          echo "Grafana Password: $(kubectl get secret --namespace default grafana -o jsonpath="{.data.admin-password}" | base64 --decode)"
+          echo "Grafana Username: admin"

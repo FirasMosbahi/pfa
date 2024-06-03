@@ -26,19 +26,6 @@ resource "azurerm_kubernetes_cluster" "aks" {
 }
 
 resource "azurerm_storage_account" "tfstate" {
-  name                     = "tfstate${random_string.resource_code.result}"
-  resource_group_name      = var.resource_group_name
-  location                 = azurerm_resource_group.tfstate.location
-  account_tier             = "Standard"
-  account_replication_type = "LRS"
-  allow_nested_items_to_be_public = false
-
-  tags = {
-    environment = "staging"
-  }
-}
-
-resource "azurerm_storage_account" "tfstate" {
   name                  = var.terraform_storage_name + "-sa"
   resource_group_name  = var.resource_group_name
   location              = azurerm_resource_group.tfstate.location

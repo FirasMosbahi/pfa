@@ -167,7 +167,7 @@ jobs:
 
   deplyment:
     runs-on: ubuntu-latest
-    needs: infrastructure-provision
+    needs: add-promrthus-and-graphana
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2

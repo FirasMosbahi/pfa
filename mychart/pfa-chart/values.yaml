@@ -24,5 +24,5 @@ purchasesMs:
   MongoDBURI: mongodb+srv://firasmosbehi:firas@cluster0.br9usu1.mongodb.net/
   MongoDBDatabase: commerce
   JWTSecret: secret
-  port: 5001
-  stringPort: 5001
+  port: 5000
+  stringPort: "5000"

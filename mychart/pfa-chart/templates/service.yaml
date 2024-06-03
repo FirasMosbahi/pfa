@@ -8,14 +8,14 @@ spec:
   ports:
     - protocol: TCP
       name: product-ms
-      port: 8080
+      port: 3000
       targetPort: {{ .Values.productMS.port }}  
     - protocol: TCP
       name: auth-ms
-      port: 8081 
+      port: 8080 
       targetPort: {{ .Values.authMS.port }} 
     - protocol: TCP
       name: purchases-ms
-      port: 8082 
+      port: 5000 
       targetPort: {{ .Values.purchasesMs.port }}
   type: LoadBalancer

@@ -151,7 +151,7 @@ jobs:
 
   deplyment:
     runs-on: ubuntu-latest
-    needs: infrastructure-provision
+    # needs: infrastructure-provision
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
@@ -193,4 +193,4 @@ jobs:
           kubectl get all
           kubectl get service
           kubectl expose service prometheus-server --type=NodePort --target-port=9090 --name=prometheus-server-ext
-          kubectl get service
+          kubectl get service 

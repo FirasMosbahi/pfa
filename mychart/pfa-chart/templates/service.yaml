@@ -3,6 +3,8 @@ kind: Service
 metadata:
   name: pfa-service
 spec:
+  selector:
+    app: pfa-service
   ports:
     - protocol: TCP
       name: product-ms

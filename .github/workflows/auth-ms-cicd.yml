@@ -8,215 +8,118 @@ on:
       
 
 jobs:
-  # vulnerability-check:
-  #   runs-on: ubuntu-latest  
-  #   steps:
-  #     - uses: actions/checkout@v3 
+  vulnerability-check:
+    runs-on: ubuntu-latest  
+    steps:
+      - uses: actions/checkout@v3 
         
-  #     - name: Setup Go environment
-  #       uses: actions/setup-go@v3
-  #       with:
-  #         go-version: 1.22.3
+      - name: Setup Go environment
+        uses: actions/setup-go@v3
+        with:
+          go-version: 1.22.3
       
-  #     - name: Install dependencies
-  #       run: cd auth-ms && go mod tidy
+      - name: Install dependencies
+        run: cd auth-ms && go mod tidy
 
-  #     - name: Get official govulncheck
-  #       run: go install golang.org/x/vuln/cmd/govulncheck@latest
-  #       shell: bash
+      - name: Get official govulncheck
+        run: go install golang.org/x/vuln/cmd/govulncheck@latest
+        shell: bash
 
-  #     - name: Run govulncheck
-  #       run: cd auth-ms && govulncheck -show verbose .
-  #       shell: bash    
+      - name: Run govulncheck
+        run: cd auth-ms && govulncheck -show verbose .
+        shell: bash    
         
-  #     - name: Get golangci-lint
-  #       run: |
-  #         curl -sfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s v1.59.0
-  #         chmod +x ./bin/golangci-lint
-  #       shell: bash
+      - name: Get golangci-lint
+        run: |
+          curl -sfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s v1.59.0
+          chmod +x ./bin/golangci-lint
+        shell: bash
 
-  #     - name: Run Static Test
-  #       run: cd auth-ms && ../bin/golangci-lint run 
+      - name: Run Static Test
+        run: cd auth-ms && ../bin/golangci-lint run 
           
-  # build:
-  #   needs: vulnerability-check
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v3 
-  #     - name: Add environment variables
-  #       run: |
-  #         cd auth-ms && touch .env && echo 'MONGODB_URI=${{secrets.DB_HOST}}' >> .env && echo 'JWT_SECRET=${{secrets.JWT_SECRET}}' >> .env && echo 'DB_NAME=${{secrets.DB_NAME}}' >> .env && cat .env
-  #     - name: Build
-  #       run: cd auth-ms && go build -o auth-ms-build .
-  #     - name: Upload artifact
-  #       uses: actions/upload-artifact@v3
-  #       with:
-  #         name: build-artifact
-  #         path: auth-ms  
-  
-  # test:
-  #   needs: build
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v3
-  #     - name: Download build artifact
-  #       uses: actions/download-artifact@v3
-  #       with:
-  #         name: build-artifact
-  #         path: auth-ms-build   
-  #     - name: Test
-  #       run: |
-  #         cd auth-ms-build
-  #         if ! go test; then
-  #           echo "Tests failed, stopping workflow."
-  #           exit 1
-  #         fi
-
-  #     - name: Upload code coverage report to Codecov
-  #       uses: codecov/codecov-action@v2
-  #       with:
-  #         token: ${{ secrets.CODECOV_TOKEN }}
-
-  #     - name: Check Codecov report for errors
-  #       run: |
-  #         if [ -f codecov.txt ]; then
-  #           if grep -q 'error' codecov.txt; then
-  #             echo "Error found in Codecov report, stopping workflow."
-  #             exit 1
-  #           fi
-  #         fi
-  
-  # build-and-deliver-docker-image:
-  #   runs-on: ubuntu-latest
-  #   needs: test
-  #   steps:
-  #     - name: Checkout code 
-  #       uses: actions/checkout@v3
-        
-  #     - name: Set up Docker Buildx
-  #       uses: docker/setup-buildx-action@v3
-        
-  #     - name: Build image
-  #       run: cd auth-ms && docker build -t auth-ms:latest .
-
-  #     - name: Container Security Scanning
-  #       run: |
-  #         docker run --rm -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy image auth-ms:latest
-  #         if [ $? -ne 0 ]; then
-  #           echo "Security vulnerabilities found, stopping workflow."
-  #           exit 1
-  #         fi
-        
-  #     - name: Login to Azure Container Registry
-  #       uses: azure/docker-login@v1
-  #       with:
-  #         login-server: pfaacr.azurecr.io
-  #         username: ${{ secrets.ACR_USERNAME }}
-  #         password: ${{ secrets.ACR_PASSWORD }}
-
-  #     - name: Tag Docker image
-  #       run: |
-  #         docker tag auth-ms:latest pfaacr.azurecr.io/auth-ms:latest
-
-  #     - name: Push Docker image to ACR
-  #       run: |
-  #         docker push pfaacr.azurecr.io/auth-ms:latest 
-
-  infrastructure-provision:
+  build:
+    needs: vulnerability-check
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      id-token: write
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-      - name: OIDC Login to Azure Public Cloud with AzPowershell (enableAzPSSession true)
-        uses: azure/login@v1
-        with:
-          creds: ${{secrets.AZURE_CREDENTIALS}}      
-      - name: Set up Terraform
-        uses: hashicorp/setup-terraform@v1
-    
-      - name: Terraform Init
-        run: cd terraform && terraform init --backend-config=terraform.tfstate
-    
-      - name: Terraform Plan
+      - uses: actions/checkout@v3 
+      - name: Add environment variables
         run: |
-            cd terraform 
-            terraform plan 
-    
-      - name: Terraform Apply
-        run: cd terraform && terraform apply -auto-approve
+          cd auth-ms && touch .env && echo 'MONGODB_URI=${{secrets.DB_HOST}}' >> .env && echo 'JWT_SECRET=${{secrets.JWT_SECRET}}' >> .env && echo 'DB_NAME=${{secrets.DB_NAME}}' >> .env && cat .env
+      - name: Build
+        run: cd auth-ms && go build -o auth-ms-build .
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: build-artifact
+          path: auth-ms  
   
-
-  deplyment:
-    runs-on: ubuntu-latest 
-    needs: infrastructure-provision
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-      - name: OIDC Login to Azure Public Cloud with AzPowershell (enableAzPSSession true)
-        uses: azure/login@v1
-        with:
-          creds: ${{secrets.AZURE_CREDENTIALS}} 
-      - name: link azure aks with kubernetes
-        run: az aks get-credentials --name pfaaks --resource-group pfa
-      - name: create a secret for acr and aks
-        run: kubectl create secret docker-registry secret --docker-server=pfaacr.azurecr.io --docker-username=${{secrets.ACR_USERNAME}} --docker-password=${{secrets.ACR_PASSWORD}}
-        continue-on-error: true
-      - name: delete existing chart
-        run: cd mychart && helm uninstall pfa-chart
-        continue-on-error: true  
-      - name: deployment
-        run: |
-          cd mychart
-          helm install pfa-chart pfa-chart
-
-  monitoring:
+  test:
+    needs: build
     runs-on: ubuntu-latest
-    needs: deplyment
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-      - name: OIDC Login to Azure Public Cloud with AzPowershell (enableAzPSSession true)
-        uses: azure/login@v1
+      - uses: actions/checkout@v3
+      - name: Download build artifact
+        uses: actions/download-artifact@v3
         with:
-          creds: ${{secrets.AZURE_CREDENTIALS}} 
-      - name: link azure aks with kubernetes
-        run: az aks get-credentials --name pfaaks --resource-group pfa
-      - name: delete existing chart
-        run: cd mychart && helm uninstall my-prometheus && helm uninstall grafana
-        continue-on-error: true  
-      - name: add prometheus and grafana
+          name: build-artifact
+          path: auth-ms-build   
+      - name: Test
         run: |
-          cd mychart
-          helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
-          helm install my-prometheus prometheus-community/prometheus --version 25.21.0
-          helm repo add grafana https://grafana.github.io/helm-charts
-          helm install grafana grafana/grafana --version 7.3.11
-          kubectl expose service grafana --type=LoadBalancer --target-port=3000 --name=grafana-ext
-          kubectl expose service my-prometheus-server --type=LoadBalancer --target-port=9090 --name=promethus-ext
+          cd auth-ms-build
+          if ! go test; then
+            echo "Tests failed, stopping workflow."
+            exit 1
+          fi
 
-      - name: Get deployments status
-        run: |
-          kubectl wait --for=condition=available deployments --all --timeout=3000s
-          echo "All deployments are available"
-          echo kubectl get deployments
+      - name: Upload code coverage report to Codecov
+        uses: codecov/codecov-action@v2
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
 
-      - name: Get pods status
+      - name: Check Codecov report for errors
         run: |
-          kubectl wait --for=condition=ready pods --all --timeout=3000s
-          echo "All pods are ready"
-          echo kubectl get pods  
-      - name: Get services status
-        run: |
-          .github/scripts/check_loadbalancers.sh
-          echo "All services are ready"
-          echo kubectl get services
+          if [ -f codecov.txt ]; then
+            if grep -q 'error' codecov.txt; then
+              echo "Error found in Codecov report, stopping workflow."
+              exit 1
+            fi
+          fi
+  
+  build-and-deliver-docker-image:
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - name: Checkout code 
+        uses: actions/checkout@v3
+        
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+        
+      - name: Build image
+        run: cd auth-ms && docker build -t auth-ms:latest .
 
-      - name: get grafana and promethus url
+      - name: Container Security Scanning
         run: |
-          echo "Grafana URL: http://$(kubectl get svc grafana-ext -o jsonpath='{.status.loadBalancer.ingress[0].ip}'):80"
-          echo "Prometheus URL: http://$(kubectl get svc promethus-ext -o jsonpath='{.status.loadBalancer.ingress[0].ip}'):80"
-          echo "Grafana Password: $(kubectl get secret --namespace default grafana -o jsonpath="{.data.admin-password}" | base64 --decode)"
-          echo "Grafana Username: admin"
+          docker run --rm -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy image auth-ms:latest
+          if [ $? -ne 0 ]; then
+            echo "Security vulnerabilities found, stopping workflow."
+            exit 1
+          fi
+        
+      - name: Login to Azure Container Registry
+        uses: azure/docker-login@v1
+        with:
+          login-server: pfaacr.azurecr.io
+          username: ${{ secrets.ACR_USERNAME }}
+          password: ${{ secrets.ACR_PASSWORD }}
+
+      - name: Tag Docker image
+        run: |
+          docker tag auth-ms:latest pfaacr.azurecr.io/auth-ms:latest
+
+      - name: Push Docker image to ACR
+        run: |
+          docker push pfaacr.azurecr.io/auth-ms:latest 
+
+  

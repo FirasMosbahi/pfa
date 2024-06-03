@@ -1,0 +1,110 @@
+name: cd Pipeline
+
+# on:
+#   workflow_run:
+#     workflows: ["auth-ms Pipeline","product-ms-pipeline","purchases-ms-pipeline"]
+#     types:
+#       - completed     
+on:
+  push:
+  
+jobs:
+  infrastructure-provision:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: OIDC Login to Azure Public Cloud with AzPowershell (enableAzPSSession true)
+        uses: azure/login@v1
+        with:
+          creds: ${{secrets.AZURE_CREDENTIALS}}      
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v1
+    
+      - name: Terraform Init
+        run: cd terraform && terraform init --backend-config=terraform.tfstate
+    
+      - name: Terraform Plan
+        run: |
+            cd terraform 
+            terraform plan 
+    
+      - name: Terraform Apply
+        run: cd terraform && terraform apply -auto-approve
+  
+
+  deplyment:
+    runs-on: ubuntu-latest 
+    needs: infrastructure-provision
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: OIDC Login to Azure Public Cloud with AzPowershell (enableAzPSSession true)
+        uses: azure/login@v1
+        with:
+          creds: ${{secrets.AZURE_CREDENTIALS}} 
+      - name: link azure aks with kubernetes
+        run: az aks get-credentials --name pfaaks --resource-group pfa
+      - name: create a secret for acr and aks
+        run: kubectl create secret docker-registry secret --docker-server=pfaacr.azurecr.io --docker-username=${{secrets.ACR_USERNAME}} --docker-password=${{secrets.ACR_PASSWORD}}
+        continue-on-error: true
+      - name: delete existing chart
+        run: cd mychart && helm uninstall pfa-chart
+        continue-on-error: true  
+      - name: deployment
+        run: |
+          cd mychart
+          helm install pfa-chart pfa-chart
+
+  monitoring:
+    runs-on: ubuntu-latest
+    needs: deplyment
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: OIDC Login to Azure Public Cloud with AzPowershell (enableAzPSSession true)
+        uses: azure/login@v1
+        with:
+          creds: ${{secrets.AZURE_CREDENTIALS}} 
+      - name: link azure aks with kubernetes
+        run: az aks get-credentials --name pfaaks --resource-group pfa
+      - name: delete existing chart
+        run: cd mychart && helm uninstall my-prometheus && helm uninstall grafana
+        continue-on-error: true  
+      - name: add prometheus and grafana
+        run: |
+          cd mychart
+          helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+          helm install my-prometheus prometheus-community/prometheus --version 25.21.0
+          helm repo add grafana https://grafana.github.io/helm-charts
+          helm install grafana grafana/grafana --version 7.3.11
+          kubectl expose service grafana --type=LoadBalancer --target-port=3000 --name=grafana-ext
+          kubectl expose service my-prometheus-server --type=LoadBalancer --target-port=9090 --name=promethus-ext
+
+      - name: Get deployments status
+        run: |
+          kubectl wait --for=condition=available deployments --all --timeout=3000s
+          echo "All deployments are available"
+          echo kubectl get deployments
+
+      - name: Get pods status
+        run: |
+          kubectl wait --for=condition=ready pods --all --timeout=3000s
+          echo "All pods are ready"
+          echo kubectl get pods  
+      - name: Get services status
+        run: |
+          chmod +x .github/scripts/check_loadbalancers.sh
+          .github/scripts/check_loadbalancers.sh
+          echo "All services are ready"
+          echo kubectl get services
+
+      - name: get grafana and promethus url
+        run: |
+          echo "Grafana URL: http://$(kubectl get svc grafana-ext -o jsonpath='{.status.loadBalancer.ingress[0].ip}'):80"
+          echo "Prometheus URL: http://$(kubectl get svc promethus-ext -o jsonpath='{.status.loadBalancer.ingress[0].ip}'):80"
+          echo "Grafana Password: $(kubectl get secret --namespace default grafana -o jsonpath="{.data.admin-password}" | base64 --decode)"
+          echo "Grafana Username: admin"

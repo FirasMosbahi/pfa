@@ -1,4 +1,4 @@
-name: purchases-ms-pipeline
+name: purchases-ms workflow
 
 on:
   push:

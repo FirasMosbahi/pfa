@@ -7,15 +7,15 @@ spec:
     app: pfa-service
   ports:
     - protocol: TCP
-      name: {{ .Release.Name }}-product-ms
+      name: product-ms
       port: 3000
       targetPort: {{ .Values.productMS.port }}  
     - protocol: TCP
-      name: {{ .Release.Name }}-auth-ms
+      name: auth-ms
       port: 8080 
       targetPort: {{ .Values.authMS.port }} 
     - protocol: TCP
-      name: {{ .Release.Name }}-purchases-ms
+      name: purchases-ms
       port: 5001 
       targetPort: {{ .Values.purchasesMs.port }}
   type: LoadBalancer

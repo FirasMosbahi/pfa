@@ -1,4 +1,4 @@
-name: auth-ms Pipeline
+name: auth-ms workflow
 
 on:
   push:

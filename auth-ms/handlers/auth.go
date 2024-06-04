@@ -76,7 +76,6 @@ func Login(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error fetching user"})
 		return
 	}
-
 	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(loginInput.Password))
 	if err != nil {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid credentials"})

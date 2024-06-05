@@ -6,8 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="30de6fec-21bf-429d-9d52-628c80ef7dee" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/terraform/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/terraform/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/terraform/main.tf" beforeDir="false" afterPath="$PROJECT_DIR$/terraform/main.tf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/products-ms/test/app.e2e-spec.ts" beforeDir="false" afterPath="$PROJECT_DIR$/products-ms/test/app.e2e-spec.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -23,12 +22,12 @@
     &quot;assignee&quot;: &quot;FirasMosbahi&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings">{
-  &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/FirasMosbahi/pfa.git&quot;,
-    &quot;accountId&quot;: &quot;b742cf9c-9a17-4c60-b5c1-5cd16d9b05d1&quot;
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/FirasMosbahi/pfa.git",
+    "accountId": "9249bed1-5f9a-47a5-a79c-0a2a27b75cb6"
   }
-}</component>
+}]]></component>
   <component name="ProjectColorInfo">{
   &quot;customColor&quot;: &quot;&quot;,
   &quot;associatedIndex&quot;: 4
@@ -51,7 +50,7 @@
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
     "settings.editor.selected.configurable": "editor.preferences.fonts.default",
-    "ts.external.directory.path": "C:\\Users\\firas\\pfa\\products-ms\\node_modules\\typescript\\lib",
+    "ts.external.directory.path": "C:\\Users\\firas\\WebstormProjects\\lovester\\pfa1\\products-ms\\node_modules\\typescript\\lib",
     "vue.rearranger.settings.migration": "true"
   },
   "keyToStringList": {
@@ -61,7 +60,7 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-js-predefined-1d06a55b98c1-91d5c284f522-JavaScript-WS-241.15989.105" />
+        <option value="bundled-js-predefined-1d06a55b98c1-0b3e54e931b4-JavaScript-WS-241.17011.90" />
       </set>
     </attachedChunks>
   </component>
@@ -78,6 +77,7 @@
       <workItem from="1714746362625" duration="1158000" />
       <workItem from="1714748191598" duration="4000" />
       <workItem from="1714826188615" duration="26000" />
+      <workItem from="1717614823036" duration="966000" />
     </task>
     <servers />
   </component>

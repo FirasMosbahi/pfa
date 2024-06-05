@@ -49,33 +49,33 @@ jobs:
             fi
           fi
 
-  build-and-deliver-docker-image:
-    needs: build-test
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+  # build-and-deliver-docker-image:
+  #   needs: build-test
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v3
 
-      - name: Build Docker image
-        run: |
-          cd purchases-ms
-          docker build -t purchases-ms:latest .
+  #     - name: Build Docker image
+  #       run: |
+  #         cd purchases-ms
+  #         docker build -t purchases-ms:latest .
 
-      - name: Container Security Scanning
-        run: |
-          docker run --rm -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy image purchases-ms:latest      
+  #     - name: Container Security Scanning
+  #       run: |
+  #         docker run --rm -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy image purchases-ms:latest      
 
-      - name: Login to Azure Container Registry ACR
-        uses: azure/docker-login@v1
-        with:
-          login-server: pfaacr.azurecr.io
-          username: ${{ secrets.ACR_USERNAME }}
-          password: ${{ secrets.ACR_PASSWORD }}
+  #     - name: Login to Azure Container Registry ACR
+  #       uses: azure/docker-login@v1
+  #       with:
+  #         login-server: pfaacr.azurecr.io
+  #         username: ${{ secrets.ACR_USERNAME }}
+  #         password: ${{ secrets.ACR_PASSWORD }}
 
-      - name: Tag Docker image
-        run: |
-          docker tag purchases-ms:latest pfaacr.azurecr.io/purchases-ms:latest
+  #     - name: Tag Docker image
+  #       run: |
+  #         docker tag purchases-ms:latest pfaacr.azurecr.io/purchases-ms:latest
 
-      - name: Push Docker image to ACR
-        run: |
-          docker push pfaacr.azurecr.io/purchases-ms:latest
+  #     - name: Push Docker image to ACR
+  #       run: |
+  #         docker push pfaacr.azurecr.io/purchases-ms:latest

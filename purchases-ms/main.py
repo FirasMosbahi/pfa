@@ -98,5 +98,9 @@ def get_purchases():
     return jsonify({"messagee": specific_purchase})
 
 
+@app.route('/healthCheck')
+def healthCheck():
+    return jsonify({"message": "Purchases Microservice is running"})
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0',port=load_env.port)  # Set debug=False for production use

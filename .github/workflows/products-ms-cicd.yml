@@ -149,30 +149,16 @@ jobs:
         run: |
           docker push pfaacr.azurecr.io/products-ms:latest
 
-#  terraform-apply:
-#    runs-on: ubuntu-latest
-#    steps:
-#      - name: checkout code
-#        uses: actions/checkout@v3
-#
-#      - name: Azure login
-#        uses: azure/login@v2
-#        with:
-#          auth-type: IDENTITY
-#          client-id: ${{ secrets.AZURE_CLIENT_ID }}
-#          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-#          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-#          enable-AzPSSession: true
-#          
-#      - name: Install Terraform
-#        run: |
-#          curl -fsSL https://apt.releases.hashicorp.com/gpg | apt-key add -
-#          apt-add repository ppa:hashicorp/terraform
-#          apt-get update && apt-get install -y terraform
-#                     
-#      - name: Apply Terraform configuration
-#        run: |
-#          cd terraform
-#          terraform init
-#          terraform apply -auto-approve
-                  
+  trigger-downstream:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger downstream workflow
+        uses: actions/github-script@v5
+        with:
+          script: |
+                github.rest.actions.createWorkflowDispatch({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                workflow_id: 'cd.yml',
+                ref: 'main',
+                });

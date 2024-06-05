@@ -2,10 +2,10 @@ name: cd Pipeline
 
 on:
   # workflow_run:
-  #   workflows: ["auth-ms workflow"]
-  #   types:
-  #     - completed    
-  workflow_dispatch:      
+  push:
+    branches:
+      - main 
+
   
 jobs:
   infrastructure-provision:

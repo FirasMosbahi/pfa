@@ -72,7 +72,7 @@ jobs:
       - name: link azure aks with kubernetes
         run: az aks get-credentials --name pfaaks --resource-group pfa
       - name: delete existing chart
-        run: cd mychart && helm uninstall my-prometheus && helm uninstall grafana && helm uninstall pfa-chart
+        run: cd mychart && helm uninstall my-prometheus && helm uninstall grafana
         continue-on-error: true  
       - name: add prometheus and grafana
         run: |

@@ -1,15 +1,19 @@
 name: cd Pipeline
 
-# on:
-#   workflow_run:
-#     workflows: ["auth-ms Pipeline","product-ms-pipeline","purchases-ms-pipeline"]
-#     types:
-#       - completed     
 on:
+  workflow_run:
+    workflows: ["auth-ms Pipeline","product-ms-pipeline","purchases-ms-pipeline"]
+    types:
+      - completed     
   push:
+    paths:
+      - 'terraform/**'
+      - 'mychart/**'
+      - '.github/workflows/cd.yml'
   
 jobs:
   infrastructure-provision:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     permissions:
       contents: write

@@ -51,9 +51,9 @@ jobs:
       - name: create a secret for acr and aks
         run: kubectl create secret docker-registry secret --docker-server=pfaacr.azurecr.io --docker-username=${{secrets.ACR_USERNAME}} --docker-password=${{secrets.ACR_PASSWORD}}
         continue-on-error: true
-      # - name: delete existing chart
-      #   run: cd mychart && helm uninstall pfa-chart
-      #   continue-on-error: true  
+      - name: delete existing chart
+        run: cd mychart && helm uninstall pfa-chart
+        continue-on-error: true  
       - name: deployment
         run: |
           cd mychart

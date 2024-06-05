@@ -77,7 +77,6 @@ jobs:
       - name: add prometheus and grafana
         run: |
           cd mychart
-          helm install pfa-chart pfa-chart
           helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
           helm install my-prometheus prometheus-community/prometheus --version 25.21.0
           helm repo add grafana https://grafana.github.io/helm-charts

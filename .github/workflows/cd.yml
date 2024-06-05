@@ -4,12 +4,7 @@ on:
   workflow_run:
     workflows: ["auth-ms Pipeline","product-ms-pipeline","purchases-ms-pipeline"]
     types:
-      - completed     
-  push:
-    paths:
-      - 'terraform/**'
-      - 'mychart/**'
-      - '.github/workflows/cd.yml'
+      - completed
   
 jobs:
   infrastructure-provision:

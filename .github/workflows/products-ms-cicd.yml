@@ -31,7 +31,7 @@ jobs:
               echo "Vulnerabilities found, stopping workflow."
               exit 1
             else
-              echo "No vulnerabilities found."
+              echo "No vulnerabilities found." 
             fi
             else
               echo "npm-audit.json is empty."

@@ -36,7 +36,7 @@ jobs:
           python -m pytest
           
       - name: Upload code coverage report to Codecov
-        uses: codecov/codecov-action@v2
+        uses: codecov/codecov-action@v2 
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
 
@@ -79,4 +79,3 @@ jobs:
   #     - name: Push Docker image to ACR
   #       run: |
   #         docker push pfaacr.azurecr.io/purchases-ms:latest
-  

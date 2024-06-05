@@ -102,8 +102,9 @@ jobs:
           echo "All services are ready"
           echo kubectl get services
 
-      - name: get grafana and promethus url
+      - name: get deployment , grafana and promethus url
         run: |
+          echo "deployment URL: http://$(kubectl get svc pfa-service -o jsonpath='{.status.loadBalancer}')"
           echo "Grafana URL: http://$(kubectl get svc grafana-ext -o jsonpath='{.status.loadBalancer.ingress[0].ip}'):80"
           echo "Prometheus URL: http://$(kubectl get svc promethus-ext -o jsonpath='{.status.loadBalancer.ingress[0].ip}'):80"
           echo "Grafana Password: $(kubectl get secret --namespace default grafana -o jsonpath="{.data.admin-password}" | base64 --decode)"

@@ -72,7 +72,7 @@ jobs:
       - name: link azure aks with kubernetes
         run: az aks get-credentials --name pfaaks --resource-group pfa
       - name: delete existing chart
-        run: cd mychart && helm uninstall my-prometheus && helm uninstall grafana
+        run: cd mychart && helm uninstall my-prometheus && helm uninstall grafana && helm uninstall pfa-chart
         continue-on-error: true  
       - name: add prometheus and grafana
         run: |
@@ -81,6 +81,7 @@ jobs:
           helm install my-prometheus prometheus-community/prometheus --version 25.21.0
           helm repo add grafana https://grafana.github.io/helm-charts
           helm install grafana grafana/grafana --version 7.3.11
+          helm install pfa-chart pfa-chart
           kubectl expose service grafana --type=LoadBalancer --target-port=3000 --name=grafana-ext
           kubectl expose service my-prometheus-server --type=LoadBalancer --target-port=9090 --name=promethus-ext
         continue-on-error: true  

@@ -58,6 +58,7 @@ jobs:
         run: |
           cd mychart
           helm install pfa-chart ./pfa-chart
+          kubectl get all
 
   monitoring:
     runs-on: ubuntu-latest

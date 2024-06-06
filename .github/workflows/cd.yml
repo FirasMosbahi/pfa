@@ -54,7 +54,7 @@ jobs:
       - name: delete existing chart
         run: |
           cd mychart
-          helm list --all-namespaces -aq | xargs -n1 -I {} helm uninstall {} --namespace $(helm list --all-namespaces -aq | awk '{print $2}')
+          helm uninstall pfa-chart --wait
 
         continue-on-error: true  
       - name: deployment
@@ -75,9 +75,16 @@ jobs:
           creds: ${{secrets.AZURE_CREDENTIALS}} 
       - name: link azure aks with kubernetes
         run: az aks get-credentials --name pfaaks --resource-group pfa
-      # - name: delete existing chart
-      #   run: cd mychart && helm uninstall my-prometheus && helm uninstall grafana
-      #   continue-on-error: true  
+      - name: delete existing promethus chart
+        run: |
+         cd mychart
+         helm uninstall my-prometheus --wait
+        continue-on-error: true  
+      - name: delete existing grafana chart
+        run: |
+         cd mychart
+         helm uninstall grafana --wait
+        continue-on-error: true  
       - name: add prometheus and grafana
         run: |
           cd mychart

@@ -57,7 +57,7 @@ jobs:
       - name: deployment
         run: |
           cd mychart
-          helm install pfa-chart ./pfa-chart
+          helm install pfa-chart pfa-chart
 
   monitoring:
     runs-on: ubuntu-latest

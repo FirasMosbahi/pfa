@@ -3,7 +3,7 @@ name: auth-ms workflow
 on:
   push:
     paths:
-      - 'auth-ms/**'
+      - 'auth-ms/**' 
       - '.github/workflows/auth-ms-cicd.yml'
       
  

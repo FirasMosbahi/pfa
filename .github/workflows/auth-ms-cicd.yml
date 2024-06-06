@@ -121,3 +121,5 @@ jobs:
       - name: Push Docker image to ACR
         run: |
           docker push pfaacr.azurecr.io/auth-ms:latest
+
+# test
